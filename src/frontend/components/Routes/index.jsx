@@ -9,11 +9,12 @@ import {
 
 import ErrorBoundary from '../widgets/ErrorBoundary'
 import Fallback from '../widgets/Fallback'
-import PrivateRoute from '../widgets/PrivateRoute'
+// import PrivateRoute from '../widgets/PrivateRoute'
 
-const CDashboard = React.lazy(() => import('../Dashboard'))
-const CHome = React.lazy(() => import('../Home'))
-const CSignIn = React.lazy(() => import('../SignIn'))
+// const CDashboard = React.lazy(() => import('../Dashboard'))
+// const CSignIn = React.lazy(() => import('../SignIn'))
+const CNewPlace = React.lazy(() => import('../NewPlace'))
+const CUsers = React.lazy(() => import('../Users'))
 
 function Routes() {
     // Use ref -----------------------------------------------------------------
@@ -33,15 +34,19 @@ function Routes() {
         <ErrorBoundary>
             <React.Suspense fallback={<Fallback />}>
                 <Switch>
-                    <Route path={['/', '/home']} exact>
-                        <CHome />
+                    <Route path={['/', '/users']} exact>
+                        <CUsers />
                     </Route>
 
-                    <Route path="/sign-in" exact>
+                    <Route path="/places/new" exact>
+                        <CNewPlace />
+                    </Route>
+
+                    {/* <Route path="/sign-in" exact>
                         <CSignIn />
-                    </Route>
+                    </Route> */}
 
-                    <PrivateRoute path="/dashboard" exact PrivateComponent={CDashboard} />
+                    {/* <PrivateRoute path="/dashboard" exact PrivateComponent={CDashboard} /> */}
 
                     <Redirect to="/" />
                 </Switch>

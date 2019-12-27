@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function Home() {
+function NewPlace() {
     // Use context -------------------------------------------------------------
     const appState = React.useContext(AppStateContext)
 
@@ -39,7 +39,7 @@ function Home() {
                 <CheckCircleIcon className={classes.icon} size={160} />
 
                 <Typography variant="h3" align="center" gutterBottom>
-                    Get started
+                    New Place
                 </Typography>
 
                 <Typography variant="body1" gutterBottom>
@@ -83,4 +83,4 @@ function Home() {
     )
 }
 
-export default Home
+export default NewPlace
