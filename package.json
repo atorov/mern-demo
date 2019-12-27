@@ -1,0 +1,69 @@
+{
+  "name": "mern-demo",
+  "version": "0.0.1",
+  "private": true,
+  "description": "MERN stack demo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atorov/mern-demo.git"
+  },
+  "author": "atorov",
+  "license": "MIT",
+  "scripts": {
+    "fe:build": "npm run clean && NODE_ENV=production webpack",
+    "fe:start": "nodemon --watch webpack.*.js --exec \"NODE_ENV=development PORT=9080 webpack-dev-server\"",
+    "check": "npm run lint",
+    "clean": "rm -rf ./build/www",
+    "lint": "eslint --ext .jsx,.js src/",
+    "prefe:start": "npm run check"
+  },
+  "pre-commit": [
+    "check"
+  ],
+  "dependencies": {
+    "@material-ui/core": "^4.8.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.37",
+    "@material-ui/styles": "^4.7.1",
+    "classnames": "^2.2.6",
+    "core-js": "^3.6.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "regenerator-runtime": "^0.13.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-syntax-dynamic-import": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "autoprefixer": "^9.7.3",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "^3.4.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jest": "^23.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.0",
+    "nodemon": "^2.0.1",
+    "postcss-loader": "^3.0.0",
+    "pre-commit": "^1.2.2",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.1.2",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "whatwg-fetch": "^3.0.0"
+  }
+}
