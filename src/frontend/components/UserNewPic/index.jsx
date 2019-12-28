@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function NewPlace() {
+function UserNewPic() {
     // Use context -------------------------------------------------------------
     const appState = React.useContext(AppStateContext)
 
@@ -39,7 +39,7 @@ function NewPlace() {
                 <CheckCircleIcon className={classes.icon} size={160} />
 
                 <Typography variant="h3" align="center" gutterBottom>
-                    New Place
+                    New Pic
                 </Typography>
 
                 <Typography variant="body1" gutterBottom>
@@ -83,4 +83,4 @@ function NewPlace() {
     )
 }
 
-export default NewPlace
+export default UserNewPic

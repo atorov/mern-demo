@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -11,9 +11,6 @@ import Typography from '@material-ui/core/Typography'
 import { AppStateContext } from '../App/AppStateProvider'
 
 const useStyles = makeStyles((theme) => ({
-    appBar: ({ topBarHeight }) => ({
-        height: topBarHeight,
-    }),
     container: {
         display: 'flex',
         flexDirection: 'row',
@@ -28,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         height: topBarHeight - 10,
         padding: `0 ${theme.spacing(2)}px`,
         margin: `0 ${theme.spacing(2)}px 0 0`,
-        borderRight: `0.5px solid ${theme.palette.grey['300']}`,
+        borderRight: `0.5px solid ${theme.palette.grey[600]}`,
     }),
     logoTitle: {
         color: theme.palette.common.white,
@@ -37,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(4),
         color: theme.palette.common.white,
     },
+    root: ({ topBarHeight }) => ({
+        height: topBarHeight,
+    }),
     section: {
         display: 'flex',
         flexDirection: 'row',
@@ -56,7 +56,7 @@ function TopBar() {
 
     // Main renderer ===========================================================
     return (
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" className={classes.root}>
             <Container className={classes.container}>
                 <div className={classes.section}>
                     <Link to="/" className={classes.link}>
@@ -66,18 +66,38 @@ function TopBar() {
                             className={classes.logoImage}
                         />
                     </Link>
-                    <Link to="/" className={classes.link}>
+                    <NavLink to="/" exact className={classes.link}>
                         <Typography variant="h5" className={classes.logoTitle}>
                             Home
                         </Typography>
-                    </Link>
+                    </NavLink>
                 </div>
                 <div className={classes.section}>
-                    <Link to="/dashboard" className={classes.link}>
+                    {/* TODO: */}
+                    <NavLink to={`/users/${'uid-1'}/pics`} exact className={classes.link}>
                         <Typography variant="subtitle1" className={classes.navItem}>
-                            Dashboard
+                            My Pics
                         </Typography>
-                    </Link>
+                    </NavLink>
+                    <NavLink to={`/users/${'TODO:'}/pics/_new`} exact className={classes.link}>
+                        <Typography variant="subtitle1" className={classes.navItem}>
+                            Add Pic
+                        </Typography>
+                    </NavLink>
+                    <NavLink to="/auth" exact className={classes.link}>
+                        <Typography variant="subtitle1" className={classes.navItem}>
+                            Sign in
+                        </Typography>
+                    </NavLink>
+
+                    <Typography
+                        variant="subtitle1"
+                        className={classes.navItem}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => console.log('::: TODO:')}
+                    >
+                        Sign out
+                    </Typography>
                 </div>
             </Container>
         </AppBar>

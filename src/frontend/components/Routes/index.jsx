@@ -11,9 +11,9 @@ import ErrorBoundary from '../widgets/ErrorBoundary'
 import Fallback from '../widgets/Fallback'
 // import PrivateRoute from '../widgets/PrivateRoute'
 
-// const CDashboard = React.lazy(() => import('../Dashboard'))
 // const CSignIn = React.lazy(() => import('../SignIn'))
-const CNewPlace = React.lazy(() => import('../NewPlace'))
+const CUserNewPic = React.lazy(() => import('../UserNewPic'))
+const CUserPics = React.lazy(() => import('../UserPics'))
 const CUsers = React.lazy(() => import('../Users'))
 
 function Routes() {
@@ -38,8 +38,12 @@ function Routes() {
                         <CUsers />
                     </Route>
 
-                    <Route path="/places/new" exact>
-                        <CNewPlace />
+                    <Route path="/users/:uid/pics" exact>
+                        <CUserPics />
+                    </Route>
+
+                    <Route path="/users/:uid/pics/_new" exact>
+                        <CUserNewPic />
                     </Route>
 
                     {/* <Route path="/sign-in" exact>

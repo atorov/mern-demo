@@ -4,16 +4,20 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 
 import Box from '@material-ui/core/Box'
-import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 
-import UserItem from '../UserItem'
+import UserPicItem from '../UserPicItem'
 
 const useStyles = makeStyles(() => ({
-    root: {},
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
 }))
 
-function UsersList(props) {
+function UserPicsList(props) {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
@@ -21,15 +25,11 @@ function UsersList(props) {
     return (
         <Box className={classes.root}>
             {
-                props.users.length
-                    ? (
-                        <List component="nav" aria-label="secondary mailbox folders">
-                            {props.users.map((user) => <UserItem key={user.id} user={user} />)}
-                        </List>
-                    )
+                props.pics.length
+                    ? props.pics.map((pic) => <UserPicItem key={pic.id} pic={pic} />)
                     : (
                         <Typography variant="h6">
-                            No users found
+                            No pics found
                         </Typography>
                     )
             }
@@ -37,8 +37,8 @@ function UsersList(props) {
     )
 }
 
-UsersList.propTypes = {
-    users: PropTypes.array.isRequired,
+UserPicsList.propTypes = {
+    pics: PropTypes.array.isRequired,
 }
 
-export default UsersList
+export default UserPicsList

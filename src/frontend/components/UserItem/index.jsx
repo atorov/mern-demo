@@ -16,14 +16,14 @@ function UserItem(props) {
     return (
         <ListItem
             button
-            onClick={() => history.push(`/users/${props.user.id}/places`)}
+            onClick={() => history.push(`/users/${props.user.id}/pics`)}
         >
             <ListItemAvatar>
                 <Avatar alt={props.user.name} src={props.user.image} />
             </ListItemAvatar>
             <ListItemText
                 primary={props.user.name}
-                secondary={`${props.user.places === 1 ? 'Place' : 'Places'}: ${props.user.places}`}
+                secondary={`${props.user.pics === 1 ? 'Picture' : 'Pictures'}: ${props.user.pics}`}
             />
         </ListItem>
     )
