@@ -5,56 +5,21 @@ import { useParams } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 
 import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
+import { PicsStateContext } from '../App/PicsStateProvider'
+import { UsersStateContext } from '../App/UsersStateProvider'
+
 import PicItem from './PicItem'
 
-const PICS = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creator: 'uid-1',
-        },
-    },
-    {
-        id: 'p2',
-        title: 'Bridge',
-        image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creator: 'uid-3',
-        },
-    },
-    {
-        id: 'p3',
-        title: 'Plane',
-        image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        meta: {
-            creator: 'uid-1',
-        },
-    },
-    {
-        id: 'p4',
-        title: 'Plane #2',
-        image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        meta: {
-            creator: 'uid-1',
-        },
-    },
-    {
-        id: 'p6',
-        title: 'Paper Map',
-        image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creator: 'uid-1',
-        },
-    },
-]
-
 const useStyles = makeStyles((theme) => ({
-    box: {},
+    header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     pics: {
         display: 'flex',
         flexDirection: 'row',
@@ -67,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function UserPics() {
+    // Use context -------------------------------------------------------------
+    const picsState = React.useContext(PicsStateContext)
+
+    const usersState = React.useContext(UsersStateContext)
+
     // Use React Router hook ---------------------------------------------------
     const params = useParams()
 
@@ -74,11 +44,22 @@ function UserPics() {
     const classes = useStyles()
 
     // Main renderer ===========================================================
-    const pics = PICS.filter((pic) => pic.meta.creator === params.uid)
+    const pics = picsState.data.filter((pic) => pic.meta.creator === params.uid)
 
     return (
         <Container className={classes.root}>
-            <Box className={classes.box}>
+            <Box className={classes.header}>
+                <Typography variant="h6">
+                    {(() => {
+                        const selectedUser = usersState.data.find((user) => user.id === params.uid) || {}
+                        return selectedUser.name
+                    })()}
+                </Typography>
+                <Button size="large" color="primary" style={{ display: 'block' }}>
+                    Add New
+                </Button>
+            </Box>
+            <Box>
                 {
                     pics.length
                         ? (

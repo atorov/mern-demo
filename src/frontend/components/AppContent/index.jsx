@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import useMyRequest from '../../lib/hooks/my-request/use-my-request'
+import delay from '../../lib/utils/delay'
 import gdv from '../../lib/utils/gdv'
 
 import Routes from '../Routes'
@@ -14,6 +15,8 @@ import TopBar from '../TopBar'
 
 import { AppStateContext } from '../App/AppStateProvider'
 import { AuthStateContext } from '../App/AuthStateProvider'
+import { PicsDispatchContext, PicsStateContext } from '../App/PicsStateProvider'
+import { UsersDispatchContext, UsersStateContext } from '../App/UsersStateProvider'
 import { XDataDispatchContext, XDataStateContext } from '../App/XDataStateProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +42,14 @@ function AppContent() {
 
     const authState = React.useContext(AuthStateContext)
     console.log('::: authState:', authState)
+
+    const picsDispatch = React.useContext(PicsDispatchContext)
+    const picsState = React.useContext(PicsStateContext)
+    console.log('::: picsState:', picsState)
+
+    const usersDispatch = React.useContext(UsersDispatchContext)
+    const usersState = React.useContext(UsersStateContext)
+    console.log('::: usersState:', usersState)
 
     const xdataDispatch = React.useContext(XDataDispatchContext)
     const xdataState = React.useContext(XDataStateContext)
@@ -88,12 +99,124 @@ function AppContent() {
         }
     }, [myRequest, status, xdataDispatch])
 
+    // Fetch users
+    React.useEffect(() => {
+        if (xdataState.status === ':READY:' && usersState.status === ':GET_STARTED:') {
+            usersDispatch({
+                type: ':usersState/SET:',
+                payload: {
+                    status: ':PENDING:',
+                    data: [],
+                },
+            });
+
+            (async () => {
+                await delay(255) // TODO:
+
+                await usersDispatch({
+                    type: ':usersState/SET:',
+                    payload: {
+                        status: ':READY:',
+                        data: [
+                            {
+                                id: 'uid-1',
+                                name: 'Robert Doe',
+                                pics: 3,
+                            },
+                            {
+                                id: 'uid-2',
+                                name: 'Darwin',
+                                pics: 0,
+                            },
+                            {
+                                id: 'uid-3',
+                                name: 'Jane Doe',
+                                pics: 1,
+                            },
+                        ],
+                    },
+                })
+            })()
+        }
+    }, [usersDispatch, usersState.status, xdataState.status])
+
+    // Fetch pics
+    React.useEffect(() => {
+        if (usersState.status === ':READY:' && picsState.status === ':GET_STARTED:') {
+            picsDispatch({
+                type: ':picsState/SET:',
+                payload: {
+                    status: ':PENDING:',
+                    data: [],
+                },
+            });
+
+            (async () => {
+                await delay(255) // TODO:
+
+                await picsDispatch({
+                    type: ':picsState/SET:',
+                    payload: {
+                        status: ':READY:',
+                        data: [
+                            {
+                                id: 'p1',
+                                title: 'Empire State Building',
+                                image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+                                meta: {
+                                    creator: 'uid-1',
+                                },
+                            },
+                            {
+                                id: 'p2',
+                                title: 'Bridge',
+                                image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+                                meta: {
+                                    creator: 'uid-3',
+                                },
+                            },
+                            {
+                                id: 'p3',
+                                title: 'Plane',
+                                image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                                meta: {
+                                    creator: 'uid-1',
+                                },
+                            },
+                            {
+                                id: 'p4',
+                                title: 'Plane #2',
+                                image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                                meta: {
+                                    creator: 'uid-1',
+                                },
+                            },
+                            {
+                                id: 'p6',
+                                title: 'Paper Map',
+                                image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+                                meta: {
+                                    creator: 'uid-1',
+                                },
+                            },
+                        ],
+                    },
+                })
+            })()
+        }
+    }, [picsDispatch, picsState.status, usersDispatch, usersState.status])
+
     // Update status
     React.useEffect(() => {
-        if (status !== ':READY:' && xdataState.status === ':READY:') {
+        if (
+            status !== ':READY:'
+            && xdataState.status === ':READY:'
+            && usersState.status === ':READY:'
+            && picsState.status === ':READY:'
+        ) {
             setStatus(':READY:')
         }
-    }, [status, xdataState.status])
+    }, [picsState.status, status, usersState.status, xdataState.status])
 
     // Main renderer ===========================================================
     return (
@@ -101,7 +224,7 @@ function AppContent() {
             <div className={classes.appWrapper}>
                 <TopBar />
                 <main className={classes.appMain}>
-                    {status === ':READY:' ? <Routes /> : <LinearProgress />}
+                    {status === ':READY:' ? <Routes /> : <LinearProgress style={{ width: '100%' }} />}
                 </main>
             </div>
         </BrowserRouter>

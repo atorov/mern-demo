@@ -7,7 +7,10 @@ import AppContent from '../AppContent'
 
 import AppStateProvider from './AppStateProvider'
 import AuthStateProvider from './AuthStateProvider'
+import PicsStateProvider from './PicsStateProvider'
+import UsersStateProvider from './UsersStateProvider'
 import XDataStateProvider from './XDataStateProvider'
+
 
 import './style.scss'
 
@@ -36,9 +39,13 @@ function App() {
             <CssBaseline />
             <AppStateProvider>
                 <AuthStateProvider>
-                    <XDataStateProvider>
-                        <AppContent />
-                    </XDataStateProvider>
+                    <PicsStateProvider>
+                        <UsersStateProvider>
+                            <XDataStateProvider>
+                                <AppContent />
+                            </XDataStateProvider>
+                        </UsersStateProvider>
+                    </PicsStateProvider>
                 </AuthStateProvider>
             </AppStateProvider>
         </MuiThemeProvider>
