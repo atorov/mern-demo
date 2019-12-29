@@ -11,8 +11,7 @@ import ErrorBoundary from '../widgets/ErrorBoundary'
 import Fallback from '../widgets/Fallback'
 // import PrivateRoute from '../widgets/PrivateRoute'
 
-// const CSignIn = React.lazy(() => import('../SignIn'))
-const CUserNewPic = React.lazy(() => import('../UserNewPic'))
+// const CAuth = React.lazy(() => import('../Auth'))
 const CUserPics = React.lazy(() => import('../UserPics'))
 const CUsers = React.lazy(() => import('../Users'))
 
@@ -40,10 +39,6 @@ function Routes() {
 
                     <Route path="/users/:uid/pics" exact>
                         <CUserPics />
-                    </Route>
-
-                    <Route path="/users/:uid/pics/_new" exact>
-                        <CUserNewPic />
                     </Route>
 
                     {/* <Route path="/sign-in" exact>

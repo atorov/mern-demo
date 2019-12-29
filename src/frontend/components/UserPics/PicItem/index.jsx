@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import { useHistory } from 'react-router-dom'
-
 import { makeStyles } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button';
@@ -22,10 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function UserPicItem(props) {
-    // Use React Router hook ---------------------------------------------------
-    // const history = useHistory()
-
+function PicItem(props) {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
@@ -44,11 +39,8 @@ function UserPicItem(props) {
                     <Typography gutterBottom variant="h5" component="h2">
                         {props.pic.title}
                     </Typography>
-                    <Typography variant="caption" color="textSecondary" component="p" gutterBottom>
-                        {props.pic.meta.creator}
-                    </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {props.pic.description || ''}
+                        {props.pic.meta.creator}
                     </Typography>
                 </CardContent>
             </CardActionArea>
@@ -64,8 +56,8 @@ function UserPicItem(props) {
     )
 }
 
-UserPicItem.propTypes = {
+PicItem.propTypes = {
     pic: PropTypes.object.isRequired,
 }
 
-export default UserPicItem
+export default PicItem

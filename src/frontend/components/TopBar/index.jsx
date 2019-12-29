@@ -23,8 +23,10 @@ const useStyles = makeStyles((theme) => ({
     },
     logoImage: ({ topBarHeight }) => ({
         height: topBarHeight - 10,
-        padding: `0 ${theme.spacing(2)}px`,
-        margin: `0 ${theme.spacing(2)}px 0 0`,
+        padding: 0,
+        paddingRight: theme.spacing(2),
+        margin: 0,
+        marginRight: theme.spacing(2),
         borderRight: `0.5px solid ${theme.palette.grey[600]}`,
     }),
     logoTitle: {
@@ -73,17 +75,6 @@ function TopBar() {
                     </NavLink>
                 </div>
                 <div className={classes.section}>
-                    {/* TODO: */}
-                    <NavLink to={`/users/${'uid-1'}/pics`} exact className={classes.link}>
-                        <Typography variant="subtitle1" className={classes.navItem}>
-                            My Pics
-                        </Typography>
-                    </NavLink>
-                    <NavLink to={`/users/${'TODO:'}/pics/_new`} exact className={classes.link}>
-                        <Typography variant="subtitle1" className={classes.navItem}>
-                            Add Pic
-                        </Typography>
-                    </NavLink>
                     <NavLink to="/auth" exact className={classes.link}>
                         <Typography variant="subtitle1" className={classes.navItem}>
                             Sign in

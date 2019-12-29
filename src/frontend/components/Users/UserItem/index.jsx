@@ -19,7 +19,12 @@ function UserItem(props) {
             onClick={() => history.push(`/users/${props.user.id}/pics`)}
         >
             <ListItemAvatar>
-                <Avatar alt={props.user.name} src={props.user.image} />
+                <Avatar>
+                    {(() => {
+                        const [firstName = '', secondName = ''] = props.user.name.split(' ')
+                        return `${firstName[0].toUpperCase()}${(secondName[0] || '').toUpperCase()}`
+                    })()}
+                </Avatar>
             </ListItemAvatar>
             <ListItemText
                 primary={props.user.name}

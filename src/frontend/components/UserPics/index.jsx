@@ -4,58 +4,65 @@ import { useParams } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 
+import Box from '@material-ui/core/Box'
 import Container from '@material-ui/core/Container'
+import Typography from '@material-ui/core/Typography'
 
-import UserPicsList from '../UserPicsList'
+import PicItem from './PicItem'
 
 const PICS = [
     {
         id: 'p1',
         title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world!',
         image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         meta: {
             creator: 'uid-1',
-            status: 'active',
         },
     },
     {
         id: 'p2',
-        title: 'Paper Map',
-        description: 'Paper map and a ceramic coup',
-        image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        title: 'Bridge',
+        image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         meta: {
-            creator: 'uid-2',
-            status: 'active',
+            creator: 'uid-3',
         },
     },
     {
         id: 'p3',
-        title: 'Bridge',
-        description: 'Gray bridge and trees',
-        image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        title: 'Plane',
+        image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
         meta: {
-            creator: 'uid-3',
-            status: 'active',
+            creator: 'uid-1',
         },
     },
     {
         id: 'p4',
-        title: 'Plane',
-        description: 'White plane beside clouds',
+        title: 'Plane #2',
         image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
         meta: {
             creator: 'uid-1',
-            status: 'active',
+        },
+    },
+    {
+        id: 'p6',
+        title: 'Paper Map',
+        image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        meta: {
+            creator: 'uid-1',
         },
     },
 ]
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    box: {},
+    pics: {
         display: 'flex',
-        flexDirection: 'column',
-        margin: `${theme.spacing(6)}px 0 0 0`,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
+    root: {
+        margin: `${theme.spacing(4)}px 0 0 0`,
     },
 }))
 
@@ -71,7 +78,21 @@ function UserPics() {
 
     return (
         <Container className={classes.root}>
-            <UserPicsList pics={pics} />
+            <Box className={classes.box}>
+                {
+                    pics.length
+                        ? (
+                            <div className={classes.pics}>
+                                {pics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
+                            </div>
+                        )
+                        : (
+                            <Typography variant="h6" align="center">
+                                No pics found
+                            </Typography>
+                        )
+                }
+            </Box>
         </Container>
     )
 }

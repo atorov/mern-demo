@@ -18,17 +18,16 @@ import { XDataDispatchContext, XDataStateContext } from '../App/XDataStateProvid
 
 const useStyles = makeStyles((theme) => ({
     appMain: ({ topBarHeight }) => ({
-        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         marginTop: topBarHeight,
         paddingTop: 0,
         paddingRight: theme.spacing(3),
-        paddingBottom: theme.spacing(8),
+        paddingBottom: theme.spacing(4),
         paddingLeft: theme.spacing(3),
     }),
-    appWrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
+    appWrapper: {},
 }))
 
 function AppContent() {
