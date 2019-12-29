@@ -105,8 +105,8 @@ function AppContent() {
             usersDispatch({
                 type: ':usersState/SET:',
                 payload: {
+                    ...usersState,
                     status: ':PENDING:',
-                    data: [],
                 },
             });
 
@@ -116,6 +116,7 @@ function AppContent() {
                 await usersDispatch({
                     type: ':usersState/SET:',
                     payload: {
+                        ...usersState,
                         status: ':READY:',
                         data: [
                             {
@@ -138,7 +139,7 @@ function AppContent() {
                 })
             })()
         }
-    }, [usersDispatch, usersState.status, xdataState.status])
+    }, [usersDispatch, usersState, xdataState.status])
 
     // Fetch pics
     React.useEffect(() => {
@@ -146,8 +147,8 @@ function AppContent() {
             picsDispatch({
                 type: ':picsState/SET:',
                 payload: {
+                    ...picsState,
                     status: ':PENDING:',
-                    data: [],
                 },
             });
 
@@ -157,6 +158,7 @@ function AppContent() {
                 await picsDispatch({
                     type: ':picsState/SET:',
                     payload: {
+                        ...picsState,
                         status: ':READY:',
                         data: [
                             {
@@ -204,7 +206,7 @@ function AppContent() {
                 })
             })()
         }
-    }, [picsDispatch, picsState.status, usersDispatch, usersState.status])
+    }, [picsDispatch, picsState, usersState.status])
 
     // Update status
     React.useEffect(() => {

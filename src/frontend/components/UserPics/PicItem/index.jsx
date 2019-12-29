@@ -10,6 +10,10 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 
+import { PicsDispatchContext, PicsStateContext } from '../../App/PicsStateProvider'
+
+import DialogEdit from './DialogEdit'
+
 const useStyles = makeStyles((theme) => ({
     cardActionButton: {
         display: 'block',
@@ -26,41 +30,66 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function PicItem(props) {
+    // Use context -------------------------------------------------------------
+    const picsDispatch = React.useContext(PicsDispatchContext)
+    const picsState = React.useContext(PicsStateContext)
+
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
+    // Use state ---------------------------------------------------------------
+    const [isDialogOpened, setDialogOpened] = React.useState(false)
+
     // Main renderer ===========================================================
     return (
-        <Card className={classes.root}>
-            <CardMedia
-                component="img"
-                alt={props.pic.title}
-                height="140"
-                image={props.pic.image}
-                title={props.pic.title}
+        <>
+            <Card className={classes.root}>
+                <CardMedia
+                    component="img"
+                    alt={props.pic.title}
+                    height="140"
+                    image={props.pic.image}
+                    title={props.pic.title}
+                />
+                <CardContent>
+                    <Typography>
+                        {props.pic.title}
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.cardActions}>
+                    <Button
+                        size="small"
+                        color="secondary"
+                        className={classes.cardActionButton}
+                    >
+                        Delete
+                    </Button>
+                    <Button
+                        size="small"
+                        color="primary"
+                        className={classes.cardActionButton}
+                        onClick={() => setDialogOpened(true)}
+                    >
+                        Edit
+                    </Button>
+                </CardActions>
+            </Card>
+
+            <DialogEdit
+                isOpened={isDialogOpened}
+                pic={props.pic}
+                handleClose={() => {
+                    setDialogOpened(false)
+                    picsDispatch({
+                        type: ':picsState/SET:',
+                        payload: {
+                            ...picsState,
+                            status: ':GET_STARTED:',
+                        },
+                    })
+                }}
             />
-            <CardContent>
-                <Typography>
-                    {props.pic.title}
-                </Typography>
-            </CardContent>
-            <CardActions className={classes.cardActions}>
-                <Button
-                    size="small"
-                    color="secondary"
-                    className={classes.cardActionButton}
-                >
-                    Delete
-                </Button>
-                <Button
-                    size="small"
-                    color="primary"
-                    className={classes.cardActionButton}
-                >
-                    Edit
-                </Button>
-            </CardActions>
-        </Card>
+        </>
     )
 }
 

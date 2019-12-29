@@ -9,9 +9,10 @@ import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
-import { PicsStateContext } from '../App/PicsStateProvider'
+import { PicsDispatchContext, PicsStateContext } from '../App/PicsStateProvider'
 import { UsersStateContext } from '../App/UsersStateProvider'
 
+import DialogAdd from './DialogAdd'
 import PicItem from './PicItem'
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 function UserPics() {
     // Use context -------------------------------------------------------------
+    const picsDispatch = React.useContext(PicsDispatchContext)
     const picsState = React.useContext(PicsStateContext)
 
     const usersState = React.useContext(UsersStateContext)
@@ -43,38 +45,62 @@ function UserPics() {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
+    // Use state ---------------------------------------------------------------
+    const [isDialogOpened, setDialogOpened] = React.useState(false)
+
     // Main renderer ===========================================================
     const pics = picsState.data.filter((pic) => pic.meta.creator === params.uid)
 
     return (
-        <Container className={classes.root}>
-            <Box className={classes.header}>
-                <Typography variant="h6">
-                    {(() => {
-                        const selectedUser = usersState.data.find((user) => user.id === params.uid) || {}
-                        return selectedUser.name
-                    })()}
-                </Typography>
-                <Button size="large" color="primary" style={{ display: 'block' }}>
-                    Add New
-                </Button>
-            </Box>
-            <Box>
-                {
-                    pics.length
-                        ? (
-                            <div className={classes.pics}>
-                                {pics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
-                            </div>
-                        )
-                        : (
-                            <Typography variant="h6" align="center">
-                                No pics found
-                            </Typography>
-                        )
-                }
-            </Box>
-        </Container>
+        <>
+            <Container className={classes.root}>
+                <Box className={classes.header}>
+                    <Typography variant="h6">
+                        {(() => {
+                            const selectedUser = usersState.data.find((user) => user.id === params.uid) || {}
+                            return selectedUser.name
+                        })()}
+                    </Typography>
+                    <Button
+                        size="large"
+                        color="primary"
+                        style={{ display: 'block' }}
+                        onClick={() => setDialogOpened(true)}
+                    >
+                        Add New
+                    </Button>
+                </Box>
+                <Box>
+                    {
+                        pics.length
+                            ? (
+                                <div className={classes.pics}>
+                                    {pics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
+                                </div>
+                            )
+                            : (
+                                <Typography variant="h6" align="center">
+                                    No pics found
+                                </Typography>
+                            )
+                    }
+                </Box>
+            </Container>
+
+            <DialogAdd
+                isOpened={isDialogOpened}
+                handleClose={() => {
+                    setDialogOpened(false)
+                    picsDispatch({
+                        type: ':picsState/SET:',
+                        payload: {
+                            ...picsState,
+                            status: ':GET_STARTED:',
+                        },
+                    })
+                }}
+            />
+        </>
     )
 }
 
