@@ -49,7 +49,7 @@ function UserPics() {
     const [isDialogOpened, setDialogOpened] = React.useState(false)
 
     // Main renderer ===========================================================
-    const pics = picsState.data.filter((pic) => pic.meta.creator === params.uid)
+    const pics = picsState.data.filter((pic) => pic.meta.creatorId === params.uid)
 
     return (
         <>

@@ -34,6 +34,11 @@ function DialogEdit(props) {
                     size="small"
                     color="primary"
                     onClick={() => {
+                        const data = {
+                            ...props.pic,
+                            title,
+                        }
+                        console.log('::: TODO: data:', data)
                         props.handleClose()
                     }}
                 >

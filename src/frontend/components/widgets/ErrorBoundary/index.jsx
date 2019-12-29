@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 
-class ErrorBoundary extends Component {
+class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

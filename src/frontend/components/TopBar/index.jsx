@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { NavLink, Link } from 'react-router-dom'
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TopBar() {
     // Use context -------------------------------------------------------------
-    const appState = useContext(AppStateContext)
+    const appState = React.useContext(AppStateContext)
 
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles({ topBarHeight: appState.ui.topBar.height })
