@@ -8,6 +8,8 @@ import AppBar from '@material-ui/core/AppBar'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
+import useAuth from '../../lib/hooks/auth/use-auth'
+
 import { AppStateContext } from '../App/AppStateProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +58,9 @@ function TopBar() {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles({ topBarHeight: appState.ui.topBar.height })
 
+    // Use custom hook ---------------------------------------------------------
+    const [isAuth, authRef] = useAuth()
+
     // Main renderer ===========================================================
     return (
         <AppBar position="fixed" className={classes.root}>
@@ -75,20 +80,26 @@ function TopBar() {
                     </NavLink>
                 </div>
                 <div className={classes.section}>
-                    <NavLink to="/auth" exact className={classes.link}>
-                        <Typography variant="subtitle1" className={classes.navItem}>
-                            Sign in
-                        </Typography>
-                    </NavLink>
-
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.navItem}
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => console.log('::: TODO:')}
-                    >
-                        Sign out
-                    </Typography>
+                    {
+                        isAuth
+                            ? (
+                                <Typography
+                                    variant="subtitle1"
+                                    className={classes.navItem}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => authRef.current(false)}
+                                >
+                                    Sign out
+                                </Typography>
+                            )
+                            : (
+                                <NavLink to="/auth" exact className={classes.link}>
+                                    <Typography variant="subtitle1" className={classes.navItem}>
+                                        Sign in
+                                    </Typography>
+                                </NavLink>
+                            )
+                    }
                 </div>
             </Container>
         </AppBar>
