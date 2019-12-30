@@ -10,8 +10,10 @@
   "author": "atorov",
   "license": "MIT",
   "scripts": {
+    "be:start": "node src/backend/app.js",
+    "be:start:dev": "nodemon src/backend/app.js",
     "fe:build": "npm run clean && NODE_ENV=production webpack",
-    "fe:start": "nodemon --watch webpack.*.js --exec \"NODE_ENV=development PORT=9080 webpack-dev-server\"",
+    "fe:start:dev": "nodemon --watch webpack.*.js --exec \"NODE_ENV=development PORT=9080 webpack-dev-server\"",
     "check": "npm run lint",
     "clean": "rm -rf ./build/www",
     "lint": "eslint --ext .jsx,.js src/",
@@ -34,6 +36,7 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "regenerator-runtime": "^0.13.3",
+    "shortid": "^2.2.15",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
