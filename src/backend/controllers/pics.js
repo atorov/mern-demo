@@ -1,3 +1,5 @@
+
+const { validationResult } = require('express-validator')
 const shortid = require('shortid')
 
 const HTTPError = require('../models/http-error')
@@ -46,27 +48,18 @@ let PICS = [
 ]
 
 function createPic(req, res, next) {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        console.error('Errors:', errors)
+        const error = new HTTPError('Invalid inputs passed, please check your data!', 422)
+        return next(error)
+    }
+
     const {
         title,
         // image: ... // TODO:
         meta,
-        meta: {
-            creatorId,
-        } = {},
     } = req.body
-
-    if (!title) {
-        const error = new HTTPError('Title is not available in the request body!', 400)
-        return next(error)
-    }
-    if (!meta) {
-        const error = new HTTPError('Meta data is not available in the request body!', 400)
-        return next(error)
-    }
-    if (!creatorId) {
-        const error = new HTTPError('Creator ID is not available in the request body!', 400)
-        return next(error)
-    }
 
     const pic = {
         id: shortid.generate(),
@@ -91,7 +84,7 @@ function deletePic(req, res, next) {
 
     PICS = PICS.filter((_, index) => index !== picIndex)
 
-    return res.status(200).json()
+    return res.json()
 }
 
 function getAllPic(_, res) {
@@ -117,6 +110,13 @@ function getPicsByUserId(req, res) {
 }
 
 function updatePic(req, res, next) {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        console.error('Errors:', errors)
+        const error = new HTTPError('Invalid inputs passed, please check your data!', 422)
+        return next(error)
+    }
+
     const pid = req.params.pid
     const picIndex = PICS.findIndex((p) => p.id === pid)
 
@@ -125,23 +125,15 @@ function updatePic(req, res, next) {
         return next(error)
     }
 
-    const { title } = req.body
-
-    if (!title) {
-        const error = new HTTPError('Title is not available in the request body!', 400)
-        return next(error)
-    }
-
     const prevPic = PICS[picIndex]
     const pic = {
         ...prevPic,
-        title,
+        title: req.body.title,
     }
 
     PICS[picIndex] = pic
 
-    return res.status(200)
-        .json(pic)
+    return res.json(pic)
 }
 
 module.exports = {

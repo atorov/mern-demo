@@ -5,12 +5,15 @@ const bodyParser = require('body-parser')
 const HTTPError = require('./models/http-error')
 
 const picsRoutes = require('./routes/pics')
+const usersRoutes = require('./routes/users')
 
 const app = express()
 
 app.use(bodyParser.json())
 
 app.use('/api/pics', picsRoutes)
+
+app.use('/api/users', usersRoutes)
 
 app.use(() => {
     const error = new HTTPError('Could not find this route!', 404)
