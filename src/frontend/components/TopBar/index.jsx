@@ -93,11 +93,18 @@ function TopBar() {
                                 </Typography>
                             )
                             : (
-                                <NavLink to="/auth" exact className={classes.link}>
-                                    <Typography variant="subtitle1" className={classes.navItem}>
-                                        Sign in
-                                    </Typography>
-                                </NavLink>
+                                <>
+                                    <NavLink to="/auth" exact className={classes.link}>
+                                        <Typography variant="subtitle1" className={classes.navItem}>
+                                            Sign in
+                                        </Typography>
+                                    </NavLink>
+                                    <NavLink to="/sign-up" exact className={classes.link}>
+                                        <Typography variant="subtitle1" className={classes.navItem}>
+                                            Sign up
+                                        </Typography>
+                                    </NavLink>
+                                </>
                             )
                     }
                 </div>

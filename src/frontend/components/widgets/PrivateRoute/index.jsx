@@ -21,7 +21,7 @@ function RenderPropWrapper(ownProps) {
         return (
             <Redirect
                 to={{
-                    pathname: '/sign-in',
+                    pathname: '/auth',
                     search: combinedProps.location.search,
                     state: { from: combinedProps.location },
                 }}

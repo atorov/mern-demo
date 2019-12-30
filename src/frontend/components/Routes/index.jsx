@@ -12,6 +12,7 @@ import Fallback from '../widgets/Fallback'
 import PrivateRoute from '../widgets/PrivateRoute'
 
 const CAuth = React.lazy(() => import('../Auth'))
+const CSignUp = React.lazy(() => import('../SignUp'))
 const CUserPics = React.lazy(() => import('../UserPics'))
 const CUsers = React.lazy(() => import('../Users'))
 
@@ -33,8 +34,11 @@ function Routes() {
         <ErrorBoundary>
             <React.Suspense fallback={<Fallback />}>
                 <Switch>
-                    <Route path="/sign-in" exact>
+                    <Route path="/auth" exact>
                         <CAuth />
+                    </Route>
+                    <Route path="/sign-up" exact>
+                        <CSignUp />
                     </Route>
 
                     <PrivateRoute path={['/', '/users']} exact PrivateComponent={CUsers} />
