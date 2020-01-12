@@ -114,5 +114,6 @@ build
 dist
 docs
 .idea/
+private/
 stats.json
 .tmp
