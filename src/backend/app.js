@@ -34,7 +34,6 @@ app.use((err, _, res, next) => {
 
 (async () => {
     try {
-        // TODO: remove the password from the repo
         await mongoose.connect(
             `mongodb+srv://${xsettings.mongodb.user}:${xsettings.mongodb.password}@cluster0-pp2gz.mongodb.net/mern_stack_demo?retryWrites=true&w=majority`,
             {
