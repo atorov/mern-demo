@@ -8,6 +8,6 @@ const picSchema = new mongoose.Schema({
     },
 })
 
-const picModel = mongoose.Model('Pic', picSchema)
+const picModel = mongoose.model('Pic', picSchema)
 
 module.exports = picModel

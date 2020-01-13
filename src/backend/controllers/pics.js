@@ -1,8 +1,8 @@
 
 const { validationResult } = require('express-validator')
-const shortid = require('shortid')
 
 const HTTPError = require('../models/http-error')
+const Pic = require('../models/pic')
 
 let PICS = [
     {
@@ -47,30 +47,32 @@ let PICS = [
     },
 ]
 
-function createPic(req, res, next) {
+async function createPic(req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        console.error('Errors:', errors)
+        console.error('::: [create pic] Errors:', errors)
         const error = new HTTPError('Invalid inputs passed, please check your data!', 422)
         return next(error)
     }
 
-    const {
-        title,
-        // image: ... // TODO:
-        meta,
-    } = req.body
+    const pic = new Pic({
+        title: req.body.title,
+        image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', // TODO:
+        meta: {
+            creatorId: req.body.meta.creatorId,
+        },
+    })
 
-    const pic = {
-        id: shortid.generate(),
-        title,
-        meta,
+    try {
+        await pic.save()
+    }
+    catch (reason) {
+        console.error('::: [create pic] Errors:', reason)
+        const error = new HTTPError('Creating pic failed!', 500)
+        return next(error)
     }
 
-    PICS.push(pic)
-
-    return res.status(201)
-        .json(pic)
+    return res.status(201).json(pic)
 }
 
 function deletePic(req, res, next) {
@@ -91,22 +93,44 @@ function getAllPic(_, res) {
     return res.json(PICS)
 }
 
-function getPicById(req, res, next) {
-    const pid = req.params.pid
-    const pic = PICS.find((p) => p.id === pid)
+async function getPicById(req, res, next) {
+    let pic
+    try {
+        pic = await Pic.findById(req.params.pid)
+    }
+    catch (reason) {
+        console.error('::: [get pic by id] Error:', reason)
+        const error = new HTTPError('Could not find a pic!', 500)
+        return next(error)
+    }
 
     if (!pic) {
         const error = new HTTPError('Could not find a pic for the provided ID!', 404)
         return next(error)
     }
 
-    return res.json(pic)
+    return res.json(pic.toObject({ getters: true }))
 }
 
-function getPicsByUserId(req, res) {
-    const uid = req.params.uid
-    const pics = PICS.filter((p) => p.meta.creatorId === uid)
-    res.json(pics)
+async function getPicsByUserId(req, res, next) {
+    let pics
+    try {
+        pics = await Pic.find(
+            { meta: { creatorId: req.params.uid } },
+        )
+    }
+    catch (reason) {
+        console.error('::: [get pics by user id] Error:', reason)
+        const error = new HTTPError('Fetching pics failed!', 500)
+        return next(error)
+    }
+
+    // if (!pics || !pics.length) {
+    //     const error = new HTTPError('Could not find a pic for the provided user ID!', 404)
+    //     return next(error)
+    // }
+
+    return res.json(pics.map((pic) => pic.toObject({ getters: true })))
 }
 
 function updatePic(req, res, next) {
