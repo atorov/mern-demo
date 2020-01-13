@@ -3,31 +3,23 @@ const { validationResult } = require('express-validator')
 const HTTPError = require('../models/http-error')
 const User = require('../models/user')
 
-async function auth() {
-    // try {
-    //     await pic.save()
-    // }
-    // catch (reason) {
-    //     console.error('::: [create pic] Errors:', reason)
-    //     const error = new HTTPError('Creating pic failed!', 500)
-    //     return next(error)
-    // }
+async function auth(req, res, next) {
+    let user
+    try {
+        user = await User.findOne({ email: req.body.email })
+    }
+    catch (reason) {
+        console.error('::: [auth user] Errors:', reason)
+        const error = new HTTPError('Could not authenticate user!', 500)
+        return next(error)
+    }
 
-    // return res.status(201).json(pic)
+    if (!user || user.password !== req.body.password) {
+        const error = new HTTPError('Could not authenticate user!', 401)
+        return next(error)
+    }
 
-    // const {
-    //     email,
-    //     password,
-    // } = req.body
-
-    // const user = USERS.find((u) => u.email === email)
-
-    // if (!user || user.password !== password) {
-    //     const error = new HTTPError('Could not identify user, credentials seems to be wrong!', 401)
-    //     return next(error)
-    // }
-
-    // return res.json({ message: 'Authenticated' })
+    return res.json({ message: 'Authenticated' })
 }
 
 function getAllUsers() {
