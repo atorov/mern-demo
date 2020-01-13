@@ -24,7 +24,7 @@ async function createPic(req, res, next) {
         await pic.save()
     }
     catch (reason) {
-        console.error('::: [create pic] Errors:', reason)
+        console.error('::: [create pic] Error:', reason)
         const error = new HTTPError('Creating pic failed!', 500)
         return next(error)
     }
@@ -130,7 +130,7 @@ async function updatePic(req, res, next) {
         await pic.save()
     }
     catch (reason) {
-        console.error('::: [update pic] Errors:', reason)
+        console.error('::: [update pic] Error:', reason)
         const error = new HTTPError('Could not update pic!', 500)
         return next(error)
     }

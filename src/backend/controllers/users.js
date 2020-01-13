@@ -9,7 +9,7 @@ async function auth(req, res, next) {
         user = await User.findOne({ email: req.body.email })
     }
     catch (reason) {
-        console.error('::: [auth user] Errors:', reason)
+        console.error('::: [auth user] Error:', reason)
         const error = new HTTPError('Could not authenticate user!', 500)
         return next(error)
     }
@@ -22,14 +22,25 @@ async function auth(req, res, next) {
     return res.json({ message: 'Authenticated' })
 }
 
-function getAllUsers() {
-    // res.json(USERS)
+async function getAllUsers(req, res, next) {
+    let users
+    try {
+        // users = await User.find({}, 'email name')
+        users = await User.find({}, '-password')
+    }
+    catch (reason) {
+        console.error('::: [read all users] Error:', reason)
+        const error = new HTTPError('Could not fetch users!', 500)
+        return next(error)
+    }
+
+    return res.json(users.map((user) => user.toObject({ getters: true })))
 }
 
 async function signUp(req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        console.error('Errors:', errors)
+        console.error('::: [sign up] Errors:', errors)
         const error = new HTTPError('Invalid inputs passed, please check your data!', 422)
         return next(error)
     }
@@ -40,7 +51,7 @@ async function signUp(req, res, next) {
         existingUser = await User.findOne({ email: req.body.email })
     }
     catch (reason) {
-        console.error('::: [create user] Errors:', reason)
+        console.error('::: [create user] Error:', reason)
         const error = new HTTPError('Creating user failed!', 500)
         return next(error)
     }
@@ -61,7 +72,7 @@ async function signUp(req, res, next) {
         await user.save()
     }
     catch (reason) {
-        console.error('::: [create user] Errors:', reason)
+        console.error('::: [create user] Error:', reason)
         const error = new HTTPError('Creating user failed!', 500)
         return next(error)
     }
