@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-// // const uuidv4 = require('uuid/v4')
 
 const xsettings = require('./private/xsettings')
 
@@ -30,8 +29,9 @@ app.use((err, _, res, next) => {
 
     res.status(err.code || 500)
     return res.json({ message: err.message || 'An unknown error ocurred!' })
-});
+})
 
+mongoose.set('useCreateIndex', true);
 (async () => {
     try {
         await mongoose.connect(
