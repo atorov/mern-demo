@@ -100,7 +100,7 @@ async function getPicById(req, res, next) {
     }
     catch (reason) {
         console.error('::: [get pic by id] Error:', reason)
-        const error = new HTTPError('Could not find a pic!', 500)
+        const error = new HTTPError('Could not find pic!', 500)
         return next(error)
     }
 
@@ -133,31 +133,42 @@ async function getPicsByUserId(req, res, next) {
     return res.json(pics.map((pic) => pic.toObject({ getters: true })))
 }
 
-function updatePic(req, res, next) {
+async function updatePic(req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        console.error('Errors:', errors)
+        console.error('::: [update pic] Errors:', errors)
         const error = new HTTPError('Invalid inputs passed, please check your data!', 422)
         return next(error)
     }
 
-    const pid = req.params.pid
-    const picIndex = PICS.findIndex((p) => p.id === pid)
+    let pic
+    try {
+        pic = await Pic.findById(req.params.pid)
+    }
+    catch (reason) {
+        console.error('::: [update pic] Error:', reason)
+        const error = new HTTPError('Could not update pic!', 500)
+        return next(error)
+    }
 
-    if (picIndex === -1) {
+    if (!pic) {
         const error = new HTTPError('Could not find a pic for the provided ID!', 404)
         return next(error)
     }
 
-    const prevPic = PICS[picIndex]
-    const pic = {
-        ...prevPic,
-        title: req.body.title,
+
+    pic.title = req.body.title
+
+    try {
+        await pic.save()
+    }
+    catch (reason) {
+        console.error('::: [update pic] Errors:', reason)
+        const error = new HTTPError('Could not update pic!', 500)
+        return next(error)
     }
 
-    PICS[picIndex] = pic
-
-    return res.json(pic)
+    return res.json(pic.toObject({ getters: true }))
 }
 
 module.exports = {
