@@ -5,7 +5,6 @@ const picsControllers = require('../controllers/pics')
 
 const router = express.Router()
 
-router.get('/', picsControllers.getAllPic)
 router.post(
     '/',
     [

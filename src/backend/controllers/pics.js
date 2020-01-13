@@ -4,49 +4,6 @@ const { validationResult } = require('express-validator')
 const HTTPError = require('../models/http-error')
 const Pic = require('../models/pic')
 
-let PICS = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creatorId: 'uid-1',
-        },
-    },
-    {
-        id: 'p2',
-        title: 'Bridge',
-        image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creatorId: 'uid-3',
-        },
-    },
-    {
-        id: 'p3',
-        title: 'Plane',
-        image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        meta: {
-            creatorId: 'uid-1',
-        },
-    },
-    {
-        id: 'p4',
-        title: 'Plane #2',
-        image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        meta: {
-            creatorId: 'uid-1',
-        },
-    },
-    {
-        id: 'p6',
-        title: 'Paper Map',
-        image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        meta: {
-            creatorId: 'uid-1',
-        },
-    },
-]
-
 async function createPic(req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -75,22 +32,32 @@ async function createPic(req, res, next) {
     return res.status(201).json(pic)
 }
 
-function deletePic(req, res, next) {
-    const pid = req.params.pid
-    const picIndex = PICS.findIndex((p) => p.id === pid)
+async function deletePic(req, res, next) {
+    let pic
+    try {
+        pic = await Pic.findById(req.params.pid)
+    }
+    catch (reason) {
+        console.error('::: [delete pic] Error:', reason)
+        const error = new HTTPError('Could not delete pic!', 500)
+        return next(error)
+    }
 
-    if (picIndex === -1) {
+    if (!pic) {
         const error = new HTTPError('Could not find a pic for the provided ID!', 404)
         return next(error)
     }
 
-    PICS = PICS.filter((_, index) => index !== picIndex)
+    try {
+        await pic.remove()
+    }
+    catch (reason) {
+        console.error('::: [delete pic] Error:', reason)
+        const error = new HTTPError('Could not delete pic!', 500)
+        return next(error)
+    }
 
-    return res.json()
-}
-
-function getAllPic(_, res) {
-    return res.json(PICS)
+    return res.json({ message: 'Pic deleted successfully' })
 }
 
 async function getPicById(req, res, next) {
@@ -174,7 +141,6 @@ async function updatePic(req, res, next) {
 module.exports = {
     createPic,
     deletePic,
-    getAllPic,
     getPicById,
     getPicsByUserId,
     updatePic,
