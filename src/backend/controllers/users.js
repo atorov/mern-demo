@@ -65,7 +65,7 @@ async function signUp(req, res, next) {
         email: req.body.email,
         password: req.body.password, // TODO:
         name: req.body.name,
-        pics: req.body.pics,
+        pics: [],
     })
 
     try {

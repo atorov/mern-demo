@@ -4,7 +4,11 @@ const picSchema = new mongoose.Schema({
     title: { type: String, required: true },
     image: { type: String, required: true },
     meta: {
-        creatorId: { type: String, required: true },
+        creatorId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
     },
 })
 
