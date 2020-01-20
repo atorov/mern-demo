@@ -32,7 +32,7 @@ function Auth() {
     const classes = useStyles()
 
     // Use custom hook ---------------------------------------------------------
-    const [isAuth, authRef] = useAuth()
+    const [isAuth, auth] = useAuth()
 
     // Use state ---------------------------------------------------------------
     const [email, setEmail] = React.useState('')
@@ -73,7 +73,7 @@ function Auth() {
                     variant="contained"
                     color="primary"
                     style={{ width: '100%' }}
-                    onClick={() => authRef.current(true, { access_token: 'access_token' })}
+                    onClick={() => auth(true, { access_token: 'access_token' })}
                 >
                     Sign in
                 </Button>

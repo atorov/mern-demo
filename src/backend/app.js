@@ -13,6 +13,13 @@ const app = express()
 
 app.use(bodyParser.json())
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Request-With, Content-Type, Accept, Authorization')
+    res.setHeader('Access-Control-Allow-Method', 'GET, POST, PATCH, DELETE')
+    next()
+})
+
 app.use('/api/pics', picsRoutes)
 
 app.use('/api/users', usersRoutes)
@@ -42,8 +49,8 @@ mongoose.set('useCreateIndex', true);
             },
         )
     }
-    catch (error) {
-        console.error('::: [db/connect] Error:', error)
+    catch (reason) {
+        console.error('::: [db/connect] Error:', reason)
     }
 
     app.listen(5000)

@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 
 import useAuth from '../../lib/hooks/auth/use-auth'
+import useMyRequest from '../../lib/hooks/my-request/use-my-request'
 
 const useStyles = makeStyles((theme) => ({
     box: {
@@ -28,16 +29,18 @@ function SignUp() {
     // Use React Router hook ---------------------------------------------------
     const location = useLocation()
 
-    // Use Material UI hook ----------------------------------------------------
-    const classes = useStyles()
-
-    // Use custom hook ---------------------------------------------------------
-    const [isAuth, authRef] = useAuth()
-
     // Use state ---------------------------------------------------------------
     const [email, setEmail] = React.useState('')
     const [name, setName] = React.useState('')
     const [password, setPassword] = React.useState('')
+
+    // Use Material UI hook ----------------------------------------------------
+    const classes = useStyles()
+
+    // Use custom hook ---------------------------------------------------------
+    const [isAuth, auth] = useAuth()
+    const myRequest = useMyRequest()
+
 
     // Redirect ================================================================
     if (isAuth) {
@@ -83,10 +86,23 @@ function SignUp() {
                     variant="contained"
                     color="primary"
                     style={{ width: '100%' }}
-                    onClick={() => {
-                        const data = { name, email, password }
-                        console.log('::: TODO: data:', data)
-                        authRef.current(true, { access_token: 'access_token' })
+                    onClick={async () => {
+                        if (!isAuth) {
+                            const data = { name, email, password }
+                            let signUpResponse
+                            try {
+                                signUpResponse = await myRequest('http://localhost:5000/api/users/sign-up', {
+                                    method: 'POST',
+                                    data,
+                                })
+                            }
+                            catch (reason) {
+                                console.error('::: [sign up] Error:', reason)
+                            }
+
+                            console.log('::: TODO: signUpResponse:', signUpResponse)
+                            auth(true, { access_token: 'access_token' }) // TODO:
+                        }
                     }}
                 >
                     Sign up

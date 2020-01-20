@@ -59,7 +59,7 @@ function TopBar() {
     const classes = useStyles({ topBarHeight: appState.ui.topBar.height })
 
     // Use custom hook ---------------------------------------------------------
-    const [isAuth, authRef] = useAuth()
+    const [isAuth, auth] = useAuth()
 
     // Main renderer ===========================================================
     return (
@@ -87,7 +87,7 @@ function TopBar() {
                                     variant="subtitle1"
                                     className={classes.navItem}
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => authRef.current(false)}
+                                    onClick={() => auth(false)}
                                 >
                                     Sign out
                                 </Typography>
