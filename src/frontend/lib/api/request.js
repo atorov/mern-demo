@@ -12,8 +12,8 @@ async function request(resource = '', init, custom) {
     } = init || {}
 
     const {
-        cb = () => {},
-        dispatch = () => {},
+        cb = () => { },
+        dispatch = () => { },
         // state = {},
     } = custom || {}
 
@@ -51,10 +51,9 @@ async function request(resource = '', init, custom) {
     if (response.status < 200 || response.status >= 300) {
         console.error('::: [request/status] reason.status:', response.status)
         console.error('::: [request/status] reason.statusText:', response.statusText)
-        console.error('::: [request/status] response:', await response.text())
-        const error = new Error(response.statusText)
-        error.response = await response
-        throw error
+        const responseJSON = await response.json()
+        console.error('::: [request/status] response:', responseJSON)
+        throw responseJSON.message || 'Something went wrong! Try again latter!'
     }
 
     let responseData

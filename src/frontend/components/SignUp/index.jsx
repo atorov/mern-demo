@@ -12,6 +12,8 @@ import Box from '@material-ui/core/Box'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 
+import { Alert, AlertTitle } from '@material-ui/lab'
+
 import useAuth from '../../lib/hooks/auth/use-auth'
 import useMyRequest from '../../lib/hooks/my-request/use-my-request'
 
@@ -33,6 +35,7 @@ function SignUp() {
     const [email, setEmail] = React.useState('')
     const [name, setName] = React.useState('')
     const [password, setPassword] = React.useState('')
+    const [error, setError] = React.useState('')
 
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
@@ -80,6 +83,7 @@ function SignUp() {
                     onChange={(event) => setPassword(event.target.value)}
                 />
             </Box>
+
             <Box className={classes.box} style={{ marginTop: 48 }}>
                 <Button
                     disabled={!name || !email || !password}
@@ -87,26 +91,34 @@ function SignUp() {
                     color="primary"
                     style={{ width: '100%' }}
                     onClick={async () => {
-                        if (!isAuth) {
-                            const data = { name, email, password }
-                            let signUpResponse
-                            try {
-                                signUpResponse = await myRequest('http://localhost:5000/api/users/sign-up', {
-                                    method: 'POST',
-                                    data,
-                                })
-                            }
-                            catch (reason) {
-                                console.error('::: [sign up] Error:', reason)
-                            }
+                        const data = { name, email, password }
+                        let signUpResponse
+                        try {
+                            signUpResponse = await myRequest('http://localhost:5000/api/users/sign-up', {
+                                method: 'POST',
+                                data,
+                            })
 
                             console.log('::: TODO: signUpResponse:', signUpResponse)
                             auth(true, { access_token: 'access_token' }) // TODO:
+                        }
+                        catch (reason) {
+                            setError(reason)
+                            console.error('::: [sign up] Error:', reason)
                         }
                     }}
                 >
                     Sign up
                 </Button>
+
+                {error ? (
+                    <Box className={classes.box} style={{ marginTop: 48 }}>
+                        <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            {error}
+                        </Alert>
+                    </Box>
+                ) : null}
             </Box>
         </Container>
     )
