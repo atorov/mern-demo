@@ -9,13 +9,14 @@ function useMyRequest() {
     const authDispatch = React.useContext(AuthDispatchContext)
     const authState = React.useContext(AuthStateContext)
 
-    // =========================================================================
+    // Use callback ------------------------------------------------------------
     const myRequest = React.useCallback((resource, init, custom = {}) => request(resource, init, {
         dispatch: authDispatch,
         state: authState,
         ...custom,
     }), [authDispatch, authState])
 
+    // -------------------------------------------------------------------------
     return myRequest
 }
 

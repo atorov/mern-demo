@@ -9,7 +9,7 @@ function useAuth() {
     const authDispatch = React.useContext(AuthDispatchContext)
     const authState = React.useContext(AuthStateContext)
 
-    // Use effect --------------------------------------------------------------
+    // Use callback ------------------------------------------------------------
     const auth = React.useCallback((goAuth = true, data = {}) => {
         if (goAuth === true) {
             authDispatch({
@@ -22,6 +22,7 @@ function useAuth() {
         }
     }, [authDispatch])
 
+    // -------------------------------------------------------------------------
     return [
         checkAuth(authState),
         auth,

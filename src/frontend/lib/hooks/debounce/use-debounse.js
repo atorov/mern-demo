@@ -7,9 +7,11 @@ function useDebounce(
         initStatus = '',
     } = {},
 ) {
+    // Use state ---------------------------------------------------------------
     const [debouncedValue, setDebouncedValue] = React.useState(value)
     const [debouncedValueStatus, setDebouncedValueStatus] = React.useState(initStatus)
 
+    // Use effect --------------------------------------------------------------
     React.useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedValue(value)
@@ -22,6 +24,7 @@ function useDebounce(
         }
     }, [delay, value])
 
+    // -------------------------------------------------------------------------
     return [debouncedValueStatus, debouncedValue]
 }
 
