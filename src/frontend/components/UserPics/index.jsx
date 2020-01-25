@@ -116,7 +116,13 @@ function UserPics() {
                         userPics.length
                             ? (
                                 <div className={classes.pics}>
-                                    {userPics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
+                                    {userPics.map((pic) => (
+                                        <PicItem
+                                            key={pic.id}
+                                            pic={pic}
+                                            setStatus={setStatus}
+                                        />
+                                    ))}
                                 </div>
                             )
                             : (

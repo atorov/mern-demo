@@ -33,6 +33,12 @@ function DialogAdd(props) {
     // Use custom hook ---------------------------------------------------------
     const myRequest = useMyRequest()
 
+    // Use effect --------------------------------------------------------------
+    // Initialize and reinitialize
+    React.useEffect(() => {
+        setTitle('')
+    }, [props.isOpened])
+
     // Main renderer ===========================================================
     return (
         <Dialog open={props.isOpened} onClose={props.handleClose}>

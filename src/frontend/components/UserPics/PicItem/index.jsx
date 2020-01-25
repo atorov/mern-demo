@@ -12,6 +12,8 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 
+import useMyRequest from '../../../lib/hooks/my-request/use-my-request'
+
 import { AuthStateContext } from '../../App/AuthStateProvider'
 
 import DialogEdit from './DialogEdit'
@@ -44,6 +46,9 @@ function PicItem(props) {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
+    // Use custom hook ---------------------------------------------------------
+    const myRequest = useMyRequest()
+
     // Main renderer ===========================================================
     return (
         <>
@@ -67,6 +72,16 @@ function PicItem(props) {
                             size="small"
                             color="secondary"
                             className={classes.cardActionButton}
+                            onClick={async () => {
+                                try {
+                                    await myRequest(`http://localhost:5000/api/pics/${props.pic.id}`, { method: 'DELETE' })
+                                }
+                                catch (reason) {
+                                    console.error('::: [pic] Error:', reason)
+                                }
+
+                                props.setStatus(':INIT:');
+                            }}
                         >
                             Delete
                         </Button>
@@ -87,14 +102,7 @@ function PicItem(props) {
                 pic={props.pic}
                 handleClose={() => {
                     setDialogOpened(false)
-                    // picsDispatch({
-                    //     type: ':picsState/SET:',
-                    //     payload: {
-                    //         ...picsState,
-                    //         status: ':GET_STARTED:',
-                    //     },
-                    // })
-                    // TODO:
+                    props.setStatus(':INIT:');
                 }}
             />
         </>
@@ -103,6 +111,8 @@ function PicItem(props) {
 
 PicItem.propTypes = {
     pic: PropTypes.object.isRequired,
+
+    setStatus: PropTypes.func.isRequired,
 }
 
 export default PicItem
