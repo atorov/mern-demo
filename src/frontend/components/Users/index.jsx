@@ -7,7 +7,9 @@ import Container from '@material-ui/core/Container'
 import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 
-import { UsersStateContext } from '../App/UsersStateProvider'
+import { Alert, AlertTitle } from '@material-ui/lab'
+
+import useMyRequest from '../../lib/hooks/my-request/use-my-request'
 
 import UserItem from './UserItem'
 
@@ -23,21 +25,42 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function Users() {
-    // Use context -------------------------------------------------------------
-    const usersState = React.useContext(UsersStateContext)
+    // Use state ---------------------------------------------------------------
+    const [error, setError] = React.useState('')
+    const [users, setUsers] = React.useState([])
 
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
+
+    // Use custom hook ---------------------------------------------------------
+    const myRequest = useMyRequest()
+
+    // Use effect --------------------------------------------------------------
+    React.useEffect(() => {
+        (async () => {
+            let usersData
+            try {
+                usersData = (await myRequest('http://localhost:5000/api/users')).data
+            }
+            catch (reason) {
+                setError(reason)
+                console.error('::: [auth] Error:', reason)
+                return
+            }
+
+            setUsers(usersData)
+        })()
+    }, [myRequest])
 
     // Main renderer ===========================================================
     return (
         <Container className={classes.root}>
             <Box className={classes.box}>
                 {
-                    usersState.data.length
+                    users.length
                         ? (
                             <List component="nav" className={classes.list}>
-                                {usersState.data.map((user) => <UserItem key={user.id} user={user} />)}
+                                {users.map((user) => <UserItem key={user.id} user={user} />)}
                             </List>
                         )
                         : (
@@ -47,6 +70,15 @@ function Users() {
                         )
                 }
             </Box>
+
+            {error ? (
+                <Box className={classes.box} style={{ marginTop: 48 }}>
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {error}
+                    </Alert>
+                </Box>
+            ) : null}
         </Container>
     )
 }

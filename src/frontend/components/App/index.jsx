@@ -8,7 +8,6 @@ import AppContent from '../AppContent'
 import AppStateProvider from './AppStateProvider'
 import AuthStateProvider from './AuthStateProvider'
 import PicsStateProvider from './PicsStateProvider'
-import UsersStateProvider from './UsersStateProvider'
 import XDataStateProvider from './XDataStateProvider'
 
 
@@ -40,11 +39,9 @@ function App() {
             <AppStateProvider>
                 <AuthStateProvider>
                     <PicsStateProvider>
-                        <UsersStateProvider>
-                            <XDataStateProvider>
-                                <AppContent />
-                            </XDataStateProvider>
-                        </UsersStateProvider>
+                        <XDataStateProvider>
+                            <AppContent />
+                        </XDataStateProvider>
                     </PicsStateProvider>
                 </AuthStateProvider>
             </AppStateProvider>

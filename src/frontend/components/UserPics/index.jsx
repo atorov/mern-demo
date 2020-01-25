@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
 import { PicsDispatchContext, PicsStateContext } from '../App/PicsStateProvider'
-import { UsersStateContext } from '../App/UsersStateProvider'
 
 import DialogAdd from './DialogAdd'
 import PicItem from './PicItem'
@@ -37,8 +36,6 @@ function UserPics() {
     const picsDispatch = React.useContext(PicsDispatchContext)
     const picsState = React.useContext(PicsStateContext)
 
-    const usersState = React.useContext(UsersStateContext)
-
     // Use React Router hook ---------------------------------------------------
     const params = useParams()
 
@@ -55,12 +52,12 @@ function UserPics() {
         <>
             <Container className={classes.root}>
                 <Box className={classes.header}>
-                    <Typography variant="h6">
+                    {/* <Typography variant="h6">
                         {(() => {
                             const selectedUser = usersState.data.find((user) => user.id === params.uid) || {}
                             return selectedUser.name
                         })()}
-                    </Typography>
+                    </Typography> */}
                     <Button
                         size="large"
                         color="primary"
