@@ -28,14 +28,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function SignUp() {
-    // Use React Router hook ---------------------------------------------------
-    const location = useLocation()
-
     // Use state ---------------------------------------------------------------
     const [email, setEmail] = React.useState('')
+    const [error, setError] = React.useState('')
     const [name, setName] = React.useState('')
     const [password, setPassword] = React.useState('')
-    const [error, setError] = React.useState('')
+
+    // Use React Router hook ---------------------------------------------------
+    const location = useLocation()
 
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
@@ -43,7 +43,6 @@ function SignUp() {
     // Use custom hook ---------------------------------------------------------
     const [isAuth, auth] = useAuth()
     const myRequest = useMyRequest()
-
 
     // Redirect ================================================================
     if (isAuth) {
@@ -92,14 +91,14 @@ function SignUp() {
                     style={{ width: '100%' }}
                     onClick={async () => {
                         const data = { name, email, password }
-                        let signUpResponse
+                        // let signUpResponse
                         try {
-                            signUpResponse = await myRequest('http://localhost:5000/api/users/sign-up', {
+                            // signUpResponse =
+                            await myRequest('http://localhost:5000/api/users/sign-up', {
                                 method: 'POST',
                                 data,
                             })
 
-                            console.log('::: TODO: signUpResponse:', signUpResponse)
                             auth(true, { access_token: 'access_token' }) // TODO:
                         }
                         catch (reason) {
@@ -111,15 +110,16 @@ function SignUp() {
                     Sign up
                 </Button>
 
-                {error ? (
-                    <Box className={classes.box} style={{ marginTop: 48 }}>
-                        <Alert severity="error">
-                            <AlertTitle>Error</AlertTitle>
-                            {error}
-                        </Alert>
-                    </Box>
-                ) : null}
             </Box>
+
+            {error ? (
+                <Box className={classes.box} style={{ marginTop: 48 }}>
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {error}
+                    </Alert>
+                </Box>
+            ) : null}
         </Container>
     )
 }

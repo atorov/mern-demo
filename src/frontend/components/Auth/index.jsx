@@ -12,7 +12,10 @@ import Box from '@material-ui/core/Box'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 
+import { Alert, AlertTitle } from '@material-ui/lab'
+
 import useAuth from '../../lib/hooks/auth/use-auth'
+import useMyRequest from '../../lib/hooks/my-request/use-my-request'
 
 const useStyles = makeStyles((theme) => ({
     box: {
@@ -25,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function Auth() {
+    // Use state ---------------------------------------------------------------
+    const [email, setEmail] = React.useState('')
+    const [error, setError] = React.useState('')
+    const [password, setPassword] = React.useState('')
+
     // Use React Router hook ---------------------------------------------------
     const location = useLocation()
 
@@ -33,10 +41,7 @@ function Auth() {
 
     // Use custom hook ---------------------------------------------------------
     const [isAuth, auth] = useAuth()
-
-    // Use state ---------------------------------------------------------------
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const myRequest = useMyRequest()
 
     // Redirect ================================================================
     if (isAuth) {
@@ -73,11 +78,37 @@ function Auth() {
                     variant="contained"
                     color="primary"
                     style={{ width: '100%' }}
-                    onClick={() => auth(true, { access_token: 'access_token' })}
+                    // onClick={() => auth(true, { access_token: 'access_token' })}
+                    onClick={async () => {
+                        const data = { email, password }
+                        // let authResponse
+                        try {
+                            // authResponse =
+                            await myRequest('http://localhost:5000/api/users/auth', {
+                                method: 'POST',
+                                data,
+                            })
+
+                            auth(true, { access_token: 'access_token' }) // TODO:
+                        }
+                        catch (reason) {
+                            setError(reason)
+                            console.error('::: [auth] Error:', reason)
+                        }
+                    }}
                 >
                     Sign in
                 </Button>
             </Box>
+
+            {error ? (
+                <Box className={classes.box} style={{ marginTop: 48 }}>
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {error}
+                    </Alert>
+                </Box>
+            ) : null}
         </Container>
     )
 }
