@@ -91,15 +91,14 @@ function SignUp() {
                     style={{ width: '100%' }}
                     onClick={async () => {
                         const data = { name, email, password }
-                        // let signUpResponse
+                        let signUpData
                         try {
-                            // signUpResponse =
-                            await myRequest('http://localhost:5000/api/users/sign-up', {
+                            signUpData = (await myRequest('http://localhost:5000/api/users/sign-up', {
                                 method: 'POST',
                                 data,
-                            })
+                            })).data
 
-                            auth(true, { access_token: 'access_token' }) // TODO:
+                            auth(true, { ...signUpData, access_token: 'access_token' }) // TODO:
                         }
                         catch (reason) {
                             setError(reason)

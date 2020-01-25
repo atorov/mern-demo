@@ -44,7 +44,7 @@ function Users() {
             }
             catch (reason) {
                 setError(reason)
-                console.error('::: [auth] Error:', reason)
+                console.error('::: [users] Error:', reason)
                 return
             }
 

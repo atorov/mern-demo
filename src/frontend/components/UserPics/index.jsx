@@ -9,7 +9,11 @@ import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
-import { PicsDispatchContext, PicsStateContext } from '../App/PicsStateProvider'
+import { Alert, AlertTitle } from '@material-ui/lab'
+
+import useMyRequest from '../../lib/hooks/my-request/use-my-request'
+
+import { AuthStateContext } from '../App/AuthStateProvider'
 
 import DialogAdd from './DialogAdd'
 import PicItem from './PicItem'
@@ -33,8 +37,14 @@ const useStyles = makeStyles((theme) => ({
 
 function UserPics() {
     // Use context -------------------------------------------------------------
-    const picsDispatch = React.useContext(PicsDispatchContext)
-    const picsState = React.useContext(PicsStateContext)
+    const authState = React.useContext(AuthStateContext)
+
+    // Use state ---------------------------------------------------------------
+    const [error, setError] = React.useState('')
+    const [isDialogOpened, setDialogOpened] = React.useState(false)
+    const [status, setStatus] = React.useState(':INIT:') // ':INIT:' | ':PENDING:' | ':READY:'
+    const [user, setUser] = React.useState({})
+    const [userPics, setUserPics] = React.useState([])
 
     // Use React Router hook ---------------------------------------------------
     const params = useParams()
@@ -42,37 +52,71 @@ function UserPics() {
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
-    // Use state ---------------------------------------------------------------
-    const [isDialogOpened, setDialogOpened] = React.useState(false)
+    // Use custom hook ---------------------------------------------------------
+    const myRequest = useMyRequest()
+
+    // Use effect --------------------------------------------------------------
+    // Initialize, reinitialize
+    React.useEffect(() => {
+        if (status === ':INIT:') {
+            setStatus(':PENDING:');
+
+            (async () => {
+                let usersData
+                try {
+                    usersData = (await myRequest(`http://localhost:5000/api/users/${params.uid}`)).data
+                }
+                catch (reason) {
+                    setError(reason)
+                    console.error('::: [user] Error:', reason)
+                    return
+                }
+
+                setUser(usersData)
+
+                let userPicsData
+                try {
+                    userPicsData = (await myRequest(`http://localhost:5000/api/pics/user/${params.uid}`)).data
+                }
+                catch (reason) {
+                    setError(reason)
+                    console.error('::: [pics] Error:', reason)
+                    return
+                }
+
+                setUserPics(userPicsData)
+            })()
+
+            setStatus(':READY:')
+        }
+    }, [myRequest, params.uid, status])
 
     // Main renderer ===========================================================
-    const pics = picsState.data.filter((pic) => pic.meta.creatorId === params.uid)
-
     return (
         <>
             <Container className={classes.root}>
                 <Box className={classes.header}>
-                    {/* <Typography variant="h6">
-                        {(() => {
-                            const selectedUser = usersState.data.find((user) => user.id === params.uid) || {}
-                            return selectedUser.name
-                        })()}
-                    </Typography> */}
-                    <Button
-                        size="large"
-                        color="primary"
-                        style={{ display: 'block' }}
-                        onClick={() => setDialogOpened(true)}
-                    >
-                        Add New
-                    </Button>
+                    <Typography variant="h6">
+                        {user.name}
+                    </Typography>
+
+                    {authState.user && authState.user.id === params.uid ? (
+                        <Button
+                            size="large"
+                            color="primary"
+                            style={{ display: 'block' }}
+                            onClick={() => setDialogOpened(true)}
+                        >
+                            Add New
+                        </Button>
+                    ) : null}
                 </Box>
                 <Box>
                     {
-                        pics.length
+                        userPics.length
                             ? (
                                 <div className={classes.pics}>
-                                    {pics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
+                                    {userPics.map((pic) => <PicItem key={pic.id} pic={pic} />)}
                                 </div>
                             )
                             : (
@@ -82,19 +126,22 @@ function UserPics() {
                             )
                     }
                 </Box>
+
+                {error ? (
+                    <Box className={classes.box} style={{ marginTop: 48 }}>
+                        <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            {error}
+                        </Alert>
+                    </Box>
+                ) : null}
             </Container>
 
             <DialogAdd
                 isOpened={isDialogOpened}
                 handleClose={() => {
                     setDialogOpened(false)
-                    picsDispatch({
-                        type: ':picsState/SET:',
-                        payload: {
-                            ...picsState,
-                            status: ':GET_STARTED:',
-                        },
-                    })
+                    setStatus(':INIT:');
                 }}
             />
         </>

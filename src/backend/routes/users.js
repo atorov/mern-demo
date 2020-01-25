@@ -19,4 +19,6 @@ router.post(
     usersController.signUp,
 )
 
+router.get('/:uid', usersController.getUser)
+
 module.exports = router

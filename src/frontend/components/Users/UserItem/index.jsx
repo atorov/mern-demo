@@ -28,7 +28,7 @@ function UserItem(props) {
             </ListItemAvatar>
             <ListItemText
                 primary={props.user.name}
-                secondary={`${props.user.pics === 1 ? 'Picture' : 'Pictures'}: ${props.user.pics}`}
+                secondary={`Pictures: ${props.user.pics ? props.user.pics.length : ''}`}
             />
         </ListItem>
     )

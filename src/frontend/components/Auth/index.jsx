@@ -81,15 +81,14 @@ function Auth() {
                     // onClick={() => auth(true, { access_token: 'access_token' })}
                     onClick={async () => {
                         const data = { email, password }
-                        // let authResponse
+                        let authData
                         try {
-                            // authResponse =
-                            await myRequest('http://localhost:5000/api/users/auth', {
+                            authData = (await myRequest('http://localhost:5000/api/users/auth', {
                                 method: 'POST',
                                 data,
-                            })
+                            })).data
 
-                            auth(true, { access_token: 'access_token' }) // TODO:
+                            auth(true, { ...authData, access_token: 'access_token' }) // TODO:
                         }
                         catch (reason) {
                             setError(reason)

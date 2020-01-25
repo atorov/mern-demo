@@ -19,7 +19,7 @@ async function auth(req, res, next) {
         return next(error)
     }
 
-    return res.json({ message: 'Authenticated' })
+    return res.json({ user: user.toObject({ getters: true }) })
 }
 
 async function getAllUsers(req, res, next) {
@@ -77,11 +77,31 @@ async function signUp(req, res, next) {
         return next(error)
     }
 
-    return res.status(201).json(user.toObject({ getters: true }))
+    return res.status(201).json({ user: user.toObject({ getters: true }) })
+}
+
+async function getUser(req, res, next) {
+    let user
+    try {
+        user = await User.findById(req.params.uid)
+    }
+    catch (reason) {
+        console.error('::: [get user by id] Error:', reason)
+        const error = new HTTPError('Could not find user!', 500)
+        return next(error)
+    }
+
+    if (!user) {
+        const error = new HTTPError('Could not find a user for the provided ID!', 404)
+        return next(error)
+    }
+
+    return res.json(user.toObject({ getters: true }))
 }
 
 module.exports = {
     auth,
     getAllUsers,
+    getUser,
     signUp,
 }

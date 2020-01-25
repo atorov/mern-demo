@@ -12,6 +12,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
+import useMyRequest from '../../../lib/hooks/my-request/use-my-request'
+
 const useStyles = makeStyles(() => ({
     hiddenInput: {
         display: 'none',
@@ -19,14 +21,17 @@ const useStyles = makeStyles(() => ({
 }))
 
 function DialogAdd(props) {
+    // Use state ---------------------------------------------------------------
+    const [title, setTitle] = React.useState('')
+
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles()
 
     // Use React Router hook ---------------------------------------------------
     const params = useParams()
 
-    // Use state ---------------------------------------------------------------
-    const [title, setTitle] = React.useState('')
+    // Use custom hook ---------------------------------------------------------
+    const myRequest = useMyRequest()
 
     // Main renderer ===========================================================
     return (
@@ -69,7 +74,7 @@ function DialogAdd(props) {
                     disabled={!title} // TODO: image...
                     size="small"
                     color="primary"
-                    onClick={() => {
+                    onClick={async () => {
                         const data = {
                             title,
                             // image: ... // TODO:
@@ -77,11 +82,21 @@ function DialogAdd(props) {
                                 creatorId: params.uid,
                             },
                         }
-                        console.log('::: TODO: data:', data)
+
+                        try {
+                            await myRequest('http://localhost:5000/api/pics', {
+                                method: 'POST',
+                                data,
+                            })
+                        }
+                        catch (reason) {
+                            console.error('::: [pic] Error:', reason)
+                        }
+
                         props.handleClose()
                     }}
                 >
-                    Update
+                    Save
                 </Button>
             </DialogActions>
         </Dialog>

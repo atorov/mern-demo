@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { useParams } from 'react-router-dom'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
@@ -10,7 +12,7 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 
-import { PicsDispatchContext, PicsStateContext } from '../../App/PicsStateProvider'
+import { AuthStateContext } from '../../App/AuthStateProvider'
 
 import DialogEdit from './DialogEdit'
 
@@ -31,14 +33,16 @@ const useStyles = makeStyles((theme) => ({
 
 function PicItem(props) {
     // Use context -------------------------------------------------------------
-    const picsDispatch = React.useContext(PicsDispatchContext)
-    const picsState = React.useContext(PicsStateContext)
-
-    // Use Material UI hook ----------------------------------------------------
-    const classes = useStyles()
+    const authState = React.useContext(AuthStateContext)
 
     // Use state ---------------------------------------------------------------
     const [isDialogOpened, setDialogOpened] = React.useState(false)
+
+    // Use React Router hook ---------------------------------------------------
+    const params = useParams()
+
+    // Use Material UI hook ----------------------------------------------------
+    const classes = useStyles()
 
     // Main renderer ===========================================================
     return (
@@ -56,23 +60,26 @@ function PicItem(props) {
                         {props.pic.title}
                     </Typography>
                 </CardContent>
-                <CardActions className={classes.cardActions}>
-                    <Button
-                        size="small"
-                        color="secondary"
-                        className={classes.cardActionButton}
-                    >
-                        Delete
-                    </Button>
-                    <Button
-                        size="small"
-                        color="primary"
-                        className={classes.cardActionButton}
-                        onClick={() => setDialogOpened(true)}
-                    >
-                        Edit
-                    </Button>
-                </CardActions>
+
+                {authState.user && authState.user.id === params.uid ? (
+                    <CardActions className={classes.cardActions}>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            className={classes.cardActionButton}
+                        >
+                            Delete
+                        </Button>
+                        <Button
+                            size="small"
+                            color="primary"
+                            className={classes.cardActionButton}
+                            onClick={() => setDialogOpened(true)}
+                        >
+                            Edit
+                        </Button>
+                    </CardActions>
+                ) : null}
             </Card>
 
             <DialogEdit
@@ -80,13 +87,14 @@ function PicItem(props) {
                 pic={props.pic}
                 handleClose={() => {
                     setDialogOpened(false)
-                    picsDispatch({
-                        type: ':picsState/SET:',
-                        payload: {
-                            ...picsState,
-                            status: ':GET_STARTED:',
-                        },
-                    })
+                    // picsDispatch({
+                    //     type: ':picsState/SET:',
+                    //     payload: {
+                    //         ...picsState,
+                    //         status: ':GET_STARTED:',
+                    //     },
+                    // })
+                    // TODO:
                 }}
             />
         </>

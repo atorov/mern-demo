@@ -139,7 +139,7 @@ async function getPicsByUserId(req, res, next) {
         return next(error)
     }
 
-    if (!user || !user.pics || !user.pics.length) {
+    if (!user || !user.pics) {
         const error = new HTTPError('Could not find a user for the provided user ID!', 404)
         return next(error)
     }
