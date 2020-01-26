@@ -29,6 +29,9 @@ async function request(resource = '', init, custom) {
         'Content-Type': headers['Content-Type'] || 'application/json',
         ...headers,
     }
+    if (combinedHeaders['Content-Type'] === ':SKIP:') {
+        delete combinedHeaders['Content-Type'];
+    }
 
     let response
     try {

@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
+
+// import shortid from 'shortid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -34,7 +36,7 @@ function DialogAdd(props) {
     const classes = useStyles()
 
     // Use React Router hook ---------------------------------------------------
-    const params = useParams()
+    // const params = useParams()
 
     // Use custom hook ---------------------------------------------------------
     const myRequest = useMyRequest()
@@ -43,8 +45,8 @@ function DialogAdd(props) {
     // Initialize and reinitialize
     React.useEffect(() => {
         setTitle('')
-        setImageURL('')
         setImage(null)
+        setImageURL('')
     }, [props.isOpened])
 
     // Update image
@@ -70,15 +72,16 @@ function DialogAdd(props) {
                 />
                 <br />
                 <br />
+                {imageURL ? (
+                    <img
+                        src={imageURL}
+                        alt="Preview"
+                        className={classes.previewImage}
+                    />
+                ) : null}
                 <label htmlFor="upload-image-button">
-                    {imageURL ? (
-                        <img
-                            src={imageURL}
-                            alt="Preview"
-                            className={classes.previewImage}
-                        />
-                    ) : null}
                     <Button
+                        type="button"
                         component="span"
                         color="primary"
                         variant="contained"
@@ -89,11 +92,12 @@ function DialogAdd(props) {
                     <input
                         id="upload-image-button"
                         type="file"
-                        accept="image/*"
+                        // accept="image/*"
+                        accept=".jpg,.jpeg,.png"
                         multiple
                         className={classes.hiddenInput}
-                        onChange={(event) => {
-                            if (event.target.files && event.target.files.length) {
+                        onChange={async (event) => {
+                            if (event.target.files && event.target.files.length === 1) {
                                 setImage(event.target.files[0])
                             }
                         }}
@@ -105,23 +109,27 @@ function DialogAdd(props) {
                     Cancel
                 </Button>
                 <Button
+                    type="submit"
                     disabled={!title || !image}
                     size="small"
                     color="primary"
                     onClick={async () => {
-                        const data = {
-                            title,
-                            // image: ... // TODO:
-                            meta: {
-                                creatorId: params.uid,
-                            },
-                        }
+                        const formData = new FormData()
+                        formData.append('title', 'title')
+                        formData.append('creatorId', 'params.uid')
+                        formData.append('image', image)
 
                         try {
-                            await myRequest('http://localhost:5000/api/pics', {
-                                method: 'POST',
-                                data,
-                            })
+                            await myRequest(
+                                'http://localhost:5000/api/pics',
+                                {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'Content-Type': ':SKIP:',
+                                    },
+                                },
+                            )
                         }
                         catch (reason) {
                             console.error('::: [pic] Error:', reason)

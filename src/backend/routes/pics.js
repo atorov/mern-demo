@@ -3,13 +3,17 @@ const { check } = require('express-validator')
 
 const picsControllers = require('../controllers/pics')
 
+const fileUpload = require('../middleware/file-upload')
+
 const router = express.Router()
+
 
 router.post(
     '/',
+    fileUpload.single('image'),
     [
         check('title').not().isEmpty(),
-        check('meta.creatorId').not().isEmpty(),
+        check('creatorId').not().isEmpty(),
     ],
     picsControllers.createPic,
 )
