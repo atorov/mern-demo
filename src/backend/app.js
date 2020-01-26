@@ -36,7 +36,9 @@ app.use(() => {
 app.use((err, req, res, next) => {
     if (req.file) {
         fs.unlink(req.file.path, (fileError) => {
-            console.error('::: [file] Error:', fileError)
+            if (fileError) {
+                console.error('::: [file] Error:', fileError)
+            }
         });
     }
 

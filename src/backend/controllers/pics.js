@@ -1,3 +1,4 @@
+const fs = require('fs')
 const mongoose = require('mongoose')
 const { validationResult } = require('express-validator')
 
@@ -71,6 +72,9 @@ async function deletePic(req, res, next) {
         return next(error)
     }
 
+
+    const imagePath = pic.image
+
     try {
         const session = await mongoose.startSession()
         session.startTransaction()
@@ -84,6 +88,12 @@ async function deletePic(req, res, next) {
         const error = new HTTPError('Could not delete pic!', 500)
         return next(error)
     }
+
+    fs.unlink(imagePath, (fileError) => {
+        if (fileError) {
+            console.error('::: [file] Error:', fileError)
+        }
+    });
 
     return res.json({ message: 'Pic deleted successfully' })
 }
