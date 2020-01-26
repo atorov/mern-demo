@@ -57,7 +57,7 @@ function PicItem(props) {
                     component="img"
                     alt={props.pic.title}
                     height="140"
-                    image={props.pic.image}
+                    image={`http://localhost:5000/${props.pic.image}`}
                     title={props.pic.title}
                 />
                 <CardContent>

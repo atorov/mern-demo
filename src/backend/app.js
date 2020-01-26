@@ -1,6 +1,8 @@
-const express = require('express')
 const bodyParser = require('body-parser')
+const express = require('express')
+const fs = require('fs')
 const mongoose = require('mongoose')
+const path = require('path')
 
 const xsettings = require('./private/xsettings')
 
@@ -12,6 +14,8 @@ const usersRoutes = require('./routes/users')
 const app = express()
 
 app.use(bodyParser.json())
+
+app.use('/uploads/img', express.static(path.join(__dirname, '../../uploads/img')))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -29,7 +33,13 @@ app.use(() => {
     throw error
 })
 
-app.use((err, _, res, next) => {
+app.use((err, req, res, next) => {
+    if (req.file) {
+        fs.unlink(req.file.path, (fileError) => {
+            console.error('::: [file] Error:', fileError)
+        });
+    }
+
     if (res.headerSent) {
         return next(err)
     }

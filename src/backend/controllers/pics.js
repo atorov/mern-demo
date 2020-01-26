@@ -30,7 +30,7 @@ async function createPic(req, res, next) {
 
     const pic = new Pic({
         title: req.body.title,
-        image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', // TODO:
+        image: req.file.path,
         meta: {
             creatorId: req.body.creatorId,
         },
