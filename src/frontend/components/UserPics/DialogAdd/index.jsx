@@ -18,10 +18,16 @@ const useStyles = makeStyles(() => ({
     hiddenInput: {
         display: 'none',
     },
+    previewImage: {
+        display: 'block',
+        margin: '0 auto 8px auto',
+    },
 }))
 
 function DialogAdd(props) {
     // Use state ---------------------------------------------------------------
+    const [image, setImage] = React.useState(null)
+    const [imageURL, setImageURL] = React.useState('')
     const [title, setTitle] = React.useState('')
 
     // Use Material UI hook ----------------------------------------------------
@@ -37,7 +43,18 @@ function DialogAdd(props) {
     // Initialize and reinitialize
     React.useEffect(() => {
         setTitle('')
+        setImageURL('')
+        setImage(null)
     }, [props.isOpened])
+
+    // Update image
+    React.useEffect(() => {
+        if (image) {
+            const fileReader = new FileReader()
+            fileReader.onload = () => setImageURL(fileReader.result)
+            fileReader.readAsDataURL(image)
+        }
+    }, [image])
 
     // Main renderer ===========================================================
     return (
@@ -54,6 +71,13 @@ function DialogAdd(props) {
                 <br />
                 <br />
                 <label htmlFor="upload-image-button">
+                    {imageURL ? (
+                        <img
+                            src={imageURL}
+                            alt="Preview"
+                            className={classes.previewImage}
+                        />
+                    ) : null}
                     <Button
                         component="span"
                         color="primary"
@@ -68,7 +92,11 @@ function DialogAdd(props) {
                         accept="image/*"
                         multiple
                         className={classes.hiddenInput}
-                        onChange={(event) => console.log('::: TODO:', event.target.value)}
+                        onChange={(event) => {
+                            if (event.target.files && event.target.files.length) {
+                                setImage(event.target.files[0])
+                            }
+                        }}
                     />
                 </label>
             </DialogContent>
@@ -77,7 +105,7 @@ function DialogAdd(props) {
                     Cancel
                 </Button>
                 <Button
-                    disabled={!title} // TODO: image...
+                    disabled={!title || !image}
                     size="small"
                     color="primary"
                     onClick={async () => {
