@@ -43,14 +43,6 @@ function AppContent() {
     const authState = React.useContext(AuthStateContext)
     console.log('::: authState:', authState)
 
-    // const picsDispatch = React.useContext(PicsDispatchContext)
-    // const picsState = React.useContext(PicsStateContext)
-    // console.log('::: picsState:', picsState)
-
-    // const usersDispatch = React.useContext(UsersDispatchContext)
-    // const usersState = React.useContext(UsersStateContext)
-    // console.log('::: usersState:', usersState)
-
     // const xdataDispatch = React.useContext(XDataDispatchContext)
     // const xdataState = React.useContext(XDataStateContext)
     // console.log('::: xdataState:', xdataState)
