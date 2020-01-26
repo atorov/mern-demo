@@ -15,7 +15,7 @@ async function createPic(req, res, next) {
 
     let user
     try {
-        user = await User.findById(req.body.meta.creatorId)
+        user = await User.findById(req.body.creatorId)
     }
     catch (reason) {
         console.error('::: [create pic] Error:', reason)
@@ -32,7 +32,7 @@ async function createPic(req, res, next) {
         title: req.body.title,
         image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', // TODO:
         meta: {
-            creatorId: req.body.meta.creatorId,
+            creatorId: req.body.creatorId,
         },
     })
 

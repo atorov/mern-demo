@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import { useParams } from 'react-router-dom'
-
-// import shortid from 'shortid'
+import { useParams } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -36,7 +34,7 @@ function DialogAdd(props) {
     const classes = useStyles()
 
     // Use React Router hook ---------------------------------------------------
-    // const params = useParams()
+    const params = useParams()
 
     // Use custom hook ---------------------------------------------------------
     const myRequest = useMyRequest()
@@ -115,8 +113,8 @@ function DialogAdd(props) {
                     color="primary"
                     onClick={async () => {
                         const formData = new FormData()
-                        formData.append('title', 'title')
-                        formData.append('creatorId', 'params.uid')
+                        formData.append('title', title)
+                        formData.append('creatorId', params.uid)
                         formData.append('image', image)
 
                         try {
