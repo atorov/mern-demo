@@ -1,8 +1,10 @@
 const bcrypt = require('bcryptjs')
 const { validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
 
 const HTTPError = require('../models/http-error')
 const User = require('../models/user')
+const xsettings = require('../private/xsettings')
 
 async function auth(req, res, next) {
     let user
@@ -15,12 +17,53 @@ async function auth(req, res, next) {
         return next(error)
     }
 
-    if (!user || user.password !== req.body.password) {
+    if (!user) {
         const error = new HTTPError('Could not authenticate user!', 401)
         return next(error)
     }
 
-    return res.json({ user: user.toObject({ getters: true }) })
+    let isPasswordValid = false
+    try {
+        isPasswordValid = await bcrypt.compare(req.body.password, user.password)
+    }
+    catch (reason) {
+        console.error('::: [auth user] Error:', reason)
+        const error = new HTTPError('Could not authenticate user!', 500)
+        return next(error)
+    }
+
+    if (!isPasswordValid) {
+        const error = new HTTPError('Could not authenticate user!', 401)
+        return next(error)
+    }
+
+    if (!xsettings.secretKey) {
+        const error = new HTTPError('Secret key not found!', 500)
+        return next(error)
+    }
+
+    let token
+    try {
+        token = jwt.sign(
+            {
+                userID: user.id, // TODO: should it be id or _id?
+                email: user.email,
+            },
+            xsettings.secretKey,
+            { expiresIn: '1h' },
+        )
+    }
+    catch (reason) {
+        console.error('::: [auth user] Error:', reason)
+        const error = new HTTPError('Could not authenticate user!', 500)
+        return next(error)
+    }
+
+    return res.json({
+        userID: user.id, // TODO: should it be id or _id?
+        email: user.email,
+        token,
+    })
 }
 
 async function getAllUsers(req, res, next) {
@@ -88,7 +131,33 @@ async function signUp(req, res, next) {
         return next(error)
     }
 
-    return res.status(201).json({ user: user.toObject({ getters: true }) })
+    if (!xsettings.secretKey) {
+        const error = new HTTPError('Secret key not found!', 500)
+        return next(error)
+    }
+
+    let token
+    try {
+        token = jwt.sign(
+            {
+                userID: user.id, // TODO: should it be id or _id?
+                email: user.email,
+            },
+            xsettings.secretKey,
+            { expiresIn: '1h' },
+        )
+    }
+    catch (reason) {
+        console.error('::: [create user] Error:', reason)
+        const error = new HTTPError('Signing up failed!', 500)
+        return next(error)
+    }
+
+    return res.status(201).json({
+        userID: user.id, // TODO: should it be id or _id?
+        email: user.email,
+        token,
+    })
 }
 
 async function getUser(req, res, next) {
