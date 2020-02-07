@@ -3,10 +3,12 @@ const { check } = require('express-validator')
 
 const picsControllers = require('../controllers/pics')
 
+const checkAuth = require('../middleware/check-auth')
 const fileUpload = require('../middleware/file-upload')
 
 const router = express.Router()
 
+router.use(checkAuth)
 
 router.post(
     '/',

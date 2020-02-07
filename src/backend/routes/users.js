@@ -3,9 +3,9 @@ const { check } = require('express-validator')
 
 const usersController = require('../controllers/users')
 
-const router = express.Router()
+const checkAuth = require('../middleware/check-auth')
 
-router.get('/', usersController.getAllUsers)
+const router = express.Router()
 
 router.post('/auth', usersController.auth)
 
@@ -18,6 +18,10 @@ router.post(
     ],
     usersController.signUp,
 )
+
+router.use(checkAuth)
+
+router.get('/', usersController.getAllUsers)
 
 router.get('/:uid', usersController.getUser)
 
