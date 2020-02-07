@@ -66,7 +66,7 @@ function PicItem(props) {
                     </Typography>
                 </CardContent>
 
-                {authState.user && authState.user.id === params.uid ? (
+                {authState.userID === params.uid ? (
                     <CardActions className={classes.cardActions}>
                         <Button
                             size="small"

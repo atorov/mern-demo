@@ -1,5 +1,5 @@
 function checkAuth(authData = {}) {
-    return !!authData.access_token
+    return !!authData.token
 }
 
 export default checkAuth

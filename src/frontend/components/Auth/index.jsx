@@ -78,7 +78,6 @@ function Auth() {
                     variant="contained"
                     color="primary"
                     style={{ width: '100%' }}
-                    // onClick={() => auth(true, { access_token: 'access_token' })}
                     onClick={async () => {
                         const data = { email, password }
                         let authData
@@ -88,7 +87,7 @@ function Auth() {
                                 data,
                             })).data
 
-                            auth(true, { ...authData, access_token: 'access_token' }) // TODO:
+                            auth(true, authData)
                         }
                         catch (reason) {
                             setError(reason)

@@ -46,7 +46,7 @@ async function auth(req, res, next) {
     try {
         token = jwt.sign(
             {
-                userID: user.id, // TODO: should it be id or _id?
+                userID: user.id,
                 email: user.email,
             },
             xsettings.secretKey,
@@ -60,7 +60,7 @@ async function auth(req, res, next) {
     }
 
     return res.json({
-        userID: user.id, // TODO: should it be id or _id?
+        userID: user.id,
         email: user.email,
         token,
     })
@@ -107,7 +107,7 @@ async function signUp(req, res, next) {
 
     let hashedPassword
     try {
-        hashedPassword = bcrypt.hash(req.body.password, 12)
+        hashedPassword = await bcrypt.hash(req.body.password, 1)
     }
     catch (reason) {
         console.error('::: [create user] Error:', reason)
@@ -140,7 +140,7 @@ async function signUp(req, res, next) {
     try {
         token = jwt.sign(
             {
-                userID: user.id, // TODO: should it be id or _id?
+                userID: user.id,
                 email: user.email,
             },
             xsettings.secretKey,
@@ -154,7 +154,7 @@ async function signUp(req, res, next) {
     }
 
     return res.status(201).json({
-        userID: user.id, // TODO: should it be id or _id?
+        userID: user.id,
         email: user.email,
         token,
     })

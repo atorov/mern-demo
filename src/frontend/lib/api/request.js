@@ -14,7 +14,7 @@ async function request(resource = '', init, custom) {
     const {
         cb = () => { },
         dispatch = () => { },
-        // state = {},
+        state = {},
     } = custom || {}
 
     let payload
@@ -26,11 +26,18 @@ async function request(resource = '', init, custom) {
     console.log('TODO::: >>> request:', { resource, method, payload: body || data })
 
     const combinedHeaders = {
+        Authorization: headers.Authorization || state.token || '',
         'Content-Type': headers['Content-Type'] || 'application/json',
         ...headers,
     }
+    if (!combinedHeaders.Authorization || combinedHeaders.Authorization === ':SKIP:') {
+        delete combinedHeaders.Authorization
+    }
+    else {
+        combinedHeaders.Authorization = 'Bearer ' + combinedHeaders.Authorization
+    }
     if (combinedHeaders['Content-Type'] === ':SKIP:') {
-        delete combinedHeaders['Content-Type'];
+        delete combinedHeaders['Content-Type']
     }
 
     let response

@@ -7,6 +7,8 @@ const checkAuth = require('../middleware/check-auth')
 
 const router = express.Router()
 
+router.get('/', checkAuth, usersController.getAllUsers)
+
 router.post('/auth', usersController.auth)
 
 router.post(
@@ -19,10 +21,6 @@ router.post(
     usersController.signUp,
 )
 
-router.use(checkAuth)
-
-router.get('/', usersController.getAllUsers)
-
-router.get('/:uid', usersController.getUser)
+router.get('/:uid', checkAuth, usersController.getUser)
 
 module.exports = router

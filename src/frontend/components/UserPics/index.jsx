@@ -69,7 +69,6 @@ function UserPics() {
                 catch (reason) {
                     setError(reason)
                     console.error('::: [user] Error:', reason)
-                    return
                 }
 
                 setUser(usersData)
@@ -81,7 +80,6 @@ function UserPics() {
                 catch (reason) {
                     setError(reason)
                     console.error('::: [pics] Error:', reason)
-                    return
                 }
 
                 setUserPics(userPicsData)
@@ -100,7 +98,7 @@ function UserPics() {
                         {user.name}
                     </Typography>
 
-                    {authState.user && authState.user.id === params.uid ? (
+                    {authState.userID === params.uid ? (
                         <Button
                             size="large"
                             color="primary"

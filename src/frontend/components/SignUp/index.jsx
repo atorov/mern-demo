@@ -98,7 +98,7 @@ function SignUp() {
                                 data,
                             })).data
 
-                            auth(true, { ...signUpData, access_token: 'access_token' }) // TODO:
+                            auth(true, signUpData)
                         }
                         catch (reason) {
                             setError(reason)
