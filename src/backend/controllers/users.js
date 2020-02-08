@@ -18,7 +18,7 @@ async function auth(req, res, next) {
     }
 
     if (!user) {
-        const error = new HTTPError('Could not authenticate user!', 401)
+        const error = new HTTPError('Could not authenticate user!', 403)
         return next(error)
     }
 
@@ -33,7 +33,7 @@ async function auth(req, res, next) {
     }
 
     if (!isPasswordValid) {
-        const error = new HTTPError('Could not authenticate user!', 401)
+        const error = new HTTPError('Could not authenticate user!', 403)
         return next(error)
     }
 

@@ -16,7 +16,7 @@ async function createPic(req, res, next) {
 
     let user
     try {
-        user = await User.findById(req.body.creatorId)
+        user = await User.findById(req.body.creatorID)
     }
     catch (reason) {
         console.error('::: [create pic] Error:', reason)
@@ -33,7 +33,7 @@ async function createPic(req, res, next) {
         title: req.body.title,
         image: req.file.path,
         meta: {
-            creatorId: req.body.creatorId,
+            creatorID: req.body.creatorID,
         },
     })
 
@@ -59,11 +59,16 @@ async function deletePic(req, res, next) {
     try {
         pic = await Pic
             .findById(req.params.pid)
-            .populate('meta.creatorId')
+            .populate('meta.creatorID')
     }
     catch (reason) {
         console.error('::: [delete pic] Error:', reason)
         const error = new HTTPError('Could not delete pic!', 500)
+        return next(error)
+    }
+
+    if (pic.meta.creatorID.id !== req.userData.userID) {
+        const error = new HTTPError('Not allowed to delete this pic!', 403)
         return next(error)
     }
 
@@ -72,15 +77,14 @@ async function deletePic(req, res, next) {
         return next(error)
     }
 
-
     const imagePath = pic.image
 
     try {
         const session = await mongoose.startSession()
         session.startTransaction()
         await pic.remove({ session })
-        pic.meta.creatorId.pics.pull(pic)
-        await pic.meta.creatorId.save({ session })
+        pic.meta.creatorID.pics.pull(pic)
+        await pic.meta.creatorID.save({ session })
         await session.commitTransaction()
     }
     catch (reason) {
@@ -121,7 +125,7 @@ async function getPicsByUserId(req, res, next) {
     // let pics
     // try {
     //     pics = await Pic.find(
-    //         { meta: { creatorId: mongoose.Types.ObjectId(req.params.uid) } },
+    //         { meta: { creatorID: mongoose.Types.ObjectId(req.params.uid) } },
     //     )
     // }
     // catch (reason) {
@@ -172,6 +176,11 @@ async function updatePic(req, res, next) {
     catch (reason) {
         console.error('::: [update pic] Error:', reason)
         const error = new HTTPError('Could not update pic!', 500)
+        return next(error)
+    }
+
+    if (pic.meta.creatorID.toString() !== req.userData.userID) {
+        const error = new HTTPError('Not allowed to edit this pic!', 403)
         return next(error)
     }
 

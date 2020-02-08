@@ -114,7 +114,7 @@ function DialogAdd(props) {
                     onClick={async () => {
                         const formData = new FormData()
                         formData.append('title', title)
-                        formData.append('creatorId', params.uid)
+                        formData.append('creatorID', params.uid)
                         formData.append('image', image)
 
                         try {

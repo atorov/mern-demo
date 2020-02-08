@@ -158,7 +158,7 @@ function AppContent() {
     //                             title: 'Empire State Building',
     //                             image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
     //                             meta: {
-    //                                 creatorId: 'uid-1',
+    //                                 creatorID: 'uid-1',
     //                             },
     //                         },
     //                         {
@@ -166,7 +166,7 @@ function AppContent() {
     //                             title: 'Bridge',
     //                             image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
     //                             meta: {
-    //                                 creatorId: 'uid-3',
+    //                                 creatorID: 'uid-3',
     //                             },
     //                         },
     //                         {
@@ -174,7 +174,7 @@ function AppContent() {
     //                             title: 'Plane',
     //                             image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     //                             meta: {
-    //                                 creatorId: 'uid-1',
+    //                                 creatorID: 'uid-1',
     //                             },
     //                         },
     //                         {
@@ -182,7 +182,7 @@ function AppContent() {
     //                             title: 'Plane #2',
     //                             image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     //                             meta: {
-    //                                 creatorId: 'uid-1',
+    //                                 creatorID: 'uid-1',
     //                             },
     //                         },
     //                         {
@@ -190,7 +190,7 @@ function AppContent() {
     //                             title: 'Paper Map',
     //                             image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
     //                             meta: {
-    //                                 creatorId: 'uid-1',
+    //                                 creatorID: 'uid-1',
     //                             },
     //                         },
     //                     ],
