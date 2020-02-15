@@ -23,7 +23,7 @@ async function request(resource = '', init, custom) {
         else if (data) payload = JSON.stringify(data)
     }
 
-    console.log('TODO::: >>> request:', { resource, method, payload: body || data })
+    // console.log('::: >>> request:', { resource, method, payload: body || data })
 
     const combinedHeaders = {
         Authorization: headers.Authorization || state.token || '',

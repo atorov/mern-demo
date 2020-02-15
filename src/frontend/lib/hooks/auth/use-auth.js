@@ -2,7 +2,7 @@ import React from 'react'
 
 import { AuthDispatchContext, AuthStateContext } from '../../../components/App/AuthStateProvider'
 
-import checkAuth from './check-auth'
+import checkAuth from '../../auth/check-auth'
 
 function useAuth() {
     // Use context -------------------------------------------------------------

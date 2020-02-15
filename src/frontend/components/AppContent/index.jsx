@@ -2,22 +2,24 @@ import React from 'react'
 
 import { BrowserRouter } from 'react-router-dom'
 
+import jwt from 'jsonwebtoken'
+
 import { makeStyles } from '@material-ui/core/styles'
 
-// import LinearProgress from '@material-ui/core/LinearProgress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
-// import useMyRequest from '../../lib/hooks/my-request/use-my-request'
-// import delay from '../../lib/utils/delay'
-// import gdv from '../../lib/utils/gdv'
+import useAuth from '../../lib/hooks/auth/use-auth'
+import useMyRequest from '../../lib/hooks/my-request/use-my-request'
+import gdv from '../../lib/utils/gdv'
 
 import Routes from '../Routes'
 import TopBar from '../TopBar'
 
 import { AppStateContext } from '../App/AppStateProvider'
 import { AuthStateContext } from '../App/AuthStateProvider'
-// import { PicsDispatchContext, PicsStateContext } from '../App/PicsStateProvider'
-// import { UsersDispatchContext, UsersStateContext } from '../App/UsersStateProvider'
-// import { XDataDispatchContext, XDataStateContext } from '../App/XDataStateProvider'
+import { XDataDispatchContext, XDataStateContext } from '../App/XDataStateProvider'
+
+let logoutTimer
 
 const useStyles = makeStyles((theme) => ({
     appMain: ({ topBarHeight }) => ({
@@ -43,174 +45,85 @@ function AppContent() {
     const authState = React.useContext(AuthStateContext)
     console.log('::: authState:', authState)
 
-    // const xdataDispatch = React.useContext(XDataDispatchContext)
-    // const xdataState = React.useContext(XDataStateContext)
-    // console.log('::: xdataState:', xdataState)
+    const xdataDispatch = React.useContext(XDataDispatchContext)
+    const xdataState = React.useContext(XDataStateContext)
 
     // Use Material UI hook ----------------------------------------------------
     const classes = useStyles({ topBarHeight: appState.ui.topBar.height })
 
     // Use custom hook ---------------------------------------------------------
-    // const myRequest = useMyRequest()
+    const [isAuth, auth] = useAuth()
+    const myRequest = useMyRequest()
 
     // Use state ---------------------------------------------------------------
-    // const [status, setStatus] = React.useState(':GET_STARTED:') // ':GET_STARTED:' | ':PENDING:' | ':ERROR:' | ':READY:'
+    const [status, setStatus] = React.useState(':GET_STARTED:') // ':GET_STARTED:' | ':PENDING:' | ':ERROR:' | ':READY:'
 
     // Use effect --------------------------------------------------------------
     // Initialize
-    // React.useEffect(() => {
-    //     if (status === ':GET_STARTED:') {
-    //         setStatus(':PENDING:');
+    React.useEffect(() => {
+        if (status === ':GET_STARTED:') {
+            setStatus(':PENDING:');
 
-    //         (async () => {
-    //             xdataDispatch({ type: ':xdataState/INIT:' })
+            (async () => {
+                xdataDispatch({ type: ':xdataState/INIT:' })
 
-    //             let xdata = null
-    //             try {
-    //                 xdata = (await myRequest('/mern-demo/xdata/index.json')).data
-    //             }
-    //             catch (reason) {
-    //                 console.error('::: [fetch xdata] reason:', reason)
-    //                 setStatus(':ERROR:')
-    //                 throw reason
-    //             }
+                let xdata = null
+                try {
+                    xdata = (await myRequest('/mern-demo/xdata/index.json')).data
+                }
+                catch (reason) {
+                    console.error('::: [fetch xdata] reason:', reason)
+                    setStatus(':ERROR:')
+                    throw reason
+                }
 
-    //             if (xdata) {
-    //                 const xsettings = gdv(xdata, 'xsettings', {})
+                if (xdata) {
+                    const xsettings = gdv(xdata, 'xsettings', {})
 
-    //                 xdataDispatch({
-    //                     type: ':xdataState/xsettings/SET:',
-    //                     payload: xsettings,
-    //                 })
-    //                 xdataDispatch({
-    //                     type: ':xdataState/status/SET:',
-    //                     payload: ':READY:',
-    //                 })
-    //             }
-    //         })()
-    //     }
-    // }, [myRequest, status, xdataDispatch])
+                    xdataDispatch({
+                        type: ':xdataState/xsettings/SET:',
+                        payload: xsettings,
+                    })
+                    xdataDispatch({
+                        type: ':xdataState/status/SET:',
+                        payload: ':READY:',
+                    })
+                }
+            })()
+        }
+    }, [myRequest, status, xdataDispatch])
 
-    // Fetch users
-    // React.useEffect(() => {
-    //     if (xdataState.status === ':READY:' && usersState.status === ':GET_STARTED:') {
-    //         usersDispatch({
-    //             type: ':usersState/SET:',
-    //             payload: {
-    //                 ...usersState,
-    //                 status: ':PENDING:',
-    //             },
-    //         });
+    // Managing the token expiration data
+    React.useEffect(() => {
+        if (status === ':READY:' && isAuth) {
+            let exp
+            let iat
+            try {
+                exp = jwt.decode(authState.token).exp
+                iat = jwt.decode(authState.token).iat
+            }
+            catch (reason) {
+                console.warn('::: [decode token] Error:', reason)
+            }
 
-    //         (async () => {
-    //             await delay(255) // TODO:
+            clearInterval(logoutTimer)
 
-    //             await usersDispatch({
-    //                 type: ':usersState/SET:',
-    //                 payload: {
-    //                     ...usersState,
-    //                     status: ':READY:',
-    //                     data: [
-    //                         {
-    //                             id: 'uid-1',
-    //                             name: 'Robert Doe',
-    //                             pics: 3,
-    //                         },
-    //                         {
-    //                             id: 'uid-2',
-    //                             name: 'Darwin',
-    //                             pics: 0,
-    //                         },
-    //                         {
-    //                             id: 'uid-3',
-    //                             name: 'Jane Doe',
-    //                             pics: 1,
-    //                         },
-    //                     ],
-    //                 },
-    //             })
-    //         })()
-    //     }
-    // }, [usersDispatch, usersState, xdataState.status])
-
-    // Fetch pics
-    // React.useEffect(() => {
-    //     if (usersState.status === ':READY:' && picsState.status === ':GET_STARTED:') {
-    //         picsDispatch({
-    //             type: ':picsState/SET:',
-    //             payload: {
-    //                 ...picsState,
-    //                 status: ':PENDING:',
-    //             },
-    //         });
-
-    //         (async () => {
-    //             await delay(255) // TODO:
-
-    //             await picsDispatch({
-    //                 type: ':picsState/SET:',
-    //                 payload: {
-    //                     ...picsState,
-    //                     status: ':READY:',
-    //                     data: [
-    //                         {
-    //                             id: 'p1',
-    //                             title: 'Empire State Building',
-    //                             image: 'https://images.pexels.com/photos/2190283/pexels-photo-2190283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //                             meta: {
-    //                                 creatorID: 'uid-1',
-    //                             },
-    //                         },
-    //                         {
-    //                             id: 'p2',
-    //                             title: 'Bridge',
-    //                             image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //                             meta: {
-    //                                 creatorID: 'uid-3',
-    //                             },
-    //                         },
-    //                         {
-    //                             id: 'p3',
-    //                             title: 'Plane',
-    //                             image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    //                             meta: {
-    //                                 creatorID: 'uid-1',
-    //                             },
-    //                         },
-    //                         {
-    //                             id: 'p4',
-    //                             title: 'Plane #2',
-    //                             image: 'https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    //                             meta: {
-    //                                 creatorID: 'uid-1',
-    //                             },
-    //                         },
-    //                         {
-    //                             id: 'p6',
-    //                             title: 'Paper Map',
-    //                             image: 'https://images.pexels.com/photos/2678301/pexels-photo-2678301.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //                             meta: {
-    //                                 creatorID: 'uid-1',
-    //                             },
-    //                         },
-    //                     ],
-    //                 },
-    //             })
-    //         })()
-    //     }
-    // }, [picsDispatch, picsState, usersState.status])
+            if (!iat || +exp <= +iat || +exp < Date.now() / 1000) {
+                auth(false)
+            }
+            else {
+                logoutTimer = setTimeout(() => auth(false), (+exp - iat) * 1000)
+            }
+        }
+    }, [auth, authState.token, isAuth, status])
 
     // Update status
-    // React.useEffect(() => {
-    //     if (
-    //         status !== ':READY:'
-    //         && xdataState.status === ':READY:'
-    //         && usersState.status === ':READY:'
-    //         && picsState.status === ':READY:'
-    //     ) {
-    //         setStatus(':READY:')
-    //     }
-    // }, [picsState.status, status, usersState.status, xdataState.status])
+    React.useEffect(() => {
+        if (status !== ':READY:' && xdataState.status === ':READY:') {
+            setStatus(':READY:')
+        }
+    }, [status, xdataState.status])
+
 
     // Main renderer ===========================================================
     return (
@@ -218,8 +131,7 @@ function AppContent() {
             <div className={classes.appWrapper}>
                 <TopBar />
                 <main className={classes.appMain}>
-                    {/* TODO: {status === ':READY:' ? <Routes /> : <LinearProgress style={{ width: '100%' }} />} */}
-                    <Routes />
+                    {status === ':READY:' ? <Routes /> : <LinearProgress style={{ width: '100%' }} />}
                 </main>
             </div>
         </BrowserRouter>
