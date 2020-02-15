@@ -36,14 +36,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function AppContent() {
-    console.log('--- --- ---')
-
     // Use context -------------------------------------------------------------
     const appState = React.useContext(AppStateContext)
-    console.log('::: appState:', appState)
+    // console.log('::: appState:', appState)
 
     const authState = React.useContext(AuthStateContext)
-    console.log('::: authState:', authState)
+    // console.log('::: authState:', authState)
 
     const xdataDispatch = React.useContext(XDataDispatchContext)
     const xdataState = React.useContext(XDataStateContext)

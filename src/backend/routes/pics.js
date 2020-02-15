@@ -15,7 +15,6 @@ router.post(
     fileUpload.single('image'),
     [
         check('title').not().isEmpty(),
-        check('creatorID').not().isEmpty(),
     ],
     picsControllers.createPic,
 )

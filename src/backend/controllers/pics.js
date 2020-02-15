@@ -16,7 +16,7 @@ async function createPic(req, res, next) {
 
     let user
     try {
-        user = await User.findById(req.body.creatorID)
+        user = await User.findById(req.userData.userID)
     }
     catch (reason) {
         console.error('::: [create pic] Error:', reason)
@@ -33,7 +33,7 @@ async function createPic(req, res, next) {
         title: req.body.title,
         image: req.file.path,
         meta: {
-            creatorID: req.body.creatorID,
+            creatorID: req.userData.userID,
         },
     })
 
