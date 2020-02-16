@@ -11,6 +11,8 @@ console.log('::: process.env.NODE_ENV (NODE_ENV):', process.env.NODE_ENV)
 console.log('::: process.env.BABEL_ENV:', process.env.BABEL_ENV)
 console.log('::: APP_NAME:', APP_NAME)
 console.log('::: APP_VERSION:', APP_VERSION)
+console.log('::: ASSET_BASE_URL:', ASSET_BASE_URL)
+console.log('::: BACKEND_API_BASE_URL:', BACKEND_API_BASE_URL)
 console.log('::: Build Date:', buildDate)
 console.log('::: ::: :::')
 

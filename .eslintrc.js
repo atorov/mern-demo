@@ -14,6 +14,8 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
     APP_NAME: 'readonly',
     APP_VERSION: 'readonly',
+    ASSET_BASE_URL: 'readonly',
+    BACKEND_API_BASE_URL: 'readonly',
   },
   parser: 'babel-eslint',
   parserOptions: {

@@ -25,6 +25,8 @@ process.env.BABEL_ENV = MODE
 
 const APP_NAME = JSON.stringify(pkg.name).replace(/['"]+/g, '')
 const APP_VERSION = JSON.stringify(pkg.version)
+const ASSET_BASE_URL = JSON.stringify(MODE !== 'development' ? 'TODO:' : 'http://localhost:5000').replace(/"/g, '')
+const BACKEND_API_BASE_URL = JSON.stringify(MODE !== 'development' ? 'TODO:' : 'http://localhost:5000/api').replace(/"/g, '')
 
 const config = {
     mode: MODE,
@@ -165,6 +167,8 @@ const config = {
         new webpack.DefinePlugin({
             APP_NAME: JSON.stringify(APP_NAME),
             APP_VERSION: JSON.stringify(APP_VERSION),
+            ASSET_BASE_URL: JSON.stringify(ASSET_BASE_URL),
+            BACKEND_API_BASE_URL: JSON.stringify(BACKEND_API_BASE_URL),
             'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
             'process.env.BABEL_ENV': JSON.stringify(process.env.BABEL_ENV),
         }),

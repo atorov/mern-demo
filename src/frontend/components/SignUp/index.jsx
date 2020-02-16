@@ -93,7 +93,7 @@ function SignUp() {
                         const data = { name, email, password }
                         let signUpData
                         try {
-                            signUpData = (await myRequest('http://localhost:5000/api/users/sign-up', {
+                            signUpData = (await myRequest(`${BACKEND_API_BASE_URL}/users/sign-up`, {
                                 method: 'POST',
                                 data,
                             })).data

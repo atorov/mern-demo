@@ -82,7 +82,7 @@ function Auth() {
                         const data = { email, password }
                         let authData
                         try {
-                            authData = (await myRequest('http://localhost:5000/api/users/auth', {
+                            authData = (await myRequest(`${BACKEND_API_BASE_URL}/users/auth`, {
                                 method: 'POST',
                                 data,
                             })).data

@@ -119,7 +119,7 @@ function DialogAdd(props) {
 
                         try {
                             await myRequest(
-                                'http://localhost:5000/api/pics',
+                                `${BACKEND_API_BASE_URL}/pics`,
                                 {
                                     method: 'POST',
                                     body: formData,

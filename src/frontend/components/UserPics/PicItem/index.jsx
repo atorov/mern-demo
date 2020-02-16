@@ -57,7 +57,7 @@ function PicItem(props) {
                     component="img"
                     alt={props.pic.title}
                     height="140"
-                    image={`http://localhost:5000/${props.pic.image}`}
+                    image={`${ASSET_BASE_URL}/${props.pic.image}`}
                     title={props.pic.title}
                 />
                 <CardContent>
@@ -74,7 +74,7 @@ function PicItem(props) {
                             className={classes.cardActionButton}
                             onClick={async () => {
                                 try {
-                                    await myRequest(`http://localhost:5000/api/pics/${props.pic.id}`, { method: 'DELETE' })
+                                    await myRequest(`${BACKEND_API_BASE_URL}/pics/${props.pic.id}`, { method: 'DELETE' })
                                 }
                                 catch (reason) {
                                     console.error('::: [pic] Error:', reason)

@@ -51,7 +51,7 @@ function DialogEdit(props) {
                         }
 
                         try {
-                            await myRequest(`http://localhost:5000/api/pics/${props.pic.id}`, {
+                            await myRequest(`${BACKEND_API_BASE_URL}/pics/${props.pic.id}`, {
                                 method: 'PATCH',
                                 data,
                             })

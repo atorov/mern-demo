@@ -64,7 +64,7 @@ function UserPics() {
             (async () => {
                 let usersData
                 try {
-                    usersData = (await myRequest(`http://localhost:5000/api/users/${params.uid}`)).data
+                    usersData = (await myRequest(`${BACKEND_API_BASE_URL}/users/${params.uid}`)).data
                 }
                 catch (reason) {
                     setError(reason)
@@ -75,7 +75,7 @@ function UserPics() {
 
                 let userPicsData
                 try {
-                    userPicsData = (await myRequest(`http://localhost:5000/api/pics/user/${params.uid}`)).data
+                    userPicsData = (await myRequest(`${BACKEND_API_BASE_URL}/pics/user/${params.uid}`)).data
                 }
                 catch (reason) {
                     setError(reason)

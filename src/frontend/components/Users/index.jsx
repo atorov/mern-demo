@@ -40,7 +40,7 @@ function Users() {
         (async () => {
             let usersData
             try {
-                usersData = (await myRequest('http://localhost:5000/api/users')).data
+                usersData = (await myRequest(`${BACKEND_API_BASE_URL}/users`)).data
             }
             catch (reason) {
                 setError(reason)
