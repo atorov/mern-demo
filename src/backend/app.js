@@ -54,7 +54,7 @@ mongoose.set('useCreateIndex', true);
 (async () => {
     try {
         await mongoose.connect(
-            `mongodb+srv://${xsettings.mongodb.user}:${xsettings.mongodb.password}@cluster0-pp2gz.mongodb.net/mern_stack_demo?retryWrites=true&w=majority`,
+            `mongodb+srv://${xsettings.mongodb.user}:${xsettings.mongodb.password}@cluster0-pp2gz.mongodb.net/${xsettings.mongodb.name}?retryWrites=true&w=majority`,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
