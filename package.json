@@ -17,7 +17,9 @@
     "check": "npm run lint",
     "clean": "rm -rf ./build/www",
     "lint": "eslint --ext .jsx,.js src/",
-    "prefe:start": "npm run check"
+    "prebe:start:dev": "npm run check",
+    "prefe:start": "npm run check",
+    "prefe:start:dev": "npm run check"
   },
   "pre-commit": [
     "check"
